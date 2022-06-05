@@ -7,15 +7,7 @@ import jp.satomaru.util.function.RetArg1;
 
 public class DispatcherSample {
 
-	public static class Param {
-
-		private final int int1;
-		private final int int2;
-
-		public Param(int int1, int int2) {
-			this.int1 = int1;
-			this.int2 = int2;
-		}
+	public record Param(int int1, int int2) {
 
 		public int calculate(IntBinaryOperator operator) {
 			return operator.applyAsInt(int1, int2);
