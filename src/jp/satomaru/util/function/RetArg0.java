@@ -1,9 +1,6 @@
 package jp.satomaru.util.function;
 
-import jp.satomaru.util.either.Either;
-import jp.satomaru.util.either.EitherLeft;
-import jp.satomaru.util.either.EitherRight;
-import jp.satomaru.util.function.core.Arg0;
+import jp.satomaru.util.Either;
 
 /**
  * 引数なし戻り値ありの、例外をスローする関数です。
@@ -12,7 +9,7 @@ import jp.satomaru.util.function.core.Arg0;
  * @param <R> 戻り値
  */
 @FunctionalInterface
-public interface RetArg0<R> extends Arg0<R> {
+public interface RetArg0<R> {
 
 	/**
 	 * 実行します。
@@ -22,12 +19,16 @@ public interface RetArg0<R> extends Arg0<R> {
 	 */
 	R execute() throws Exception;
 
-	@Override
+	/**
+	 * 実行します。
+	 *
+	 * @return 実行結果
+	 */
 	default Either<Exception, R> run() {
 		try {
-			return new EitherRight<>(execute());
+			return new Either.Right<>(execute());
 		} catch (Exception e) {
-			return new EitherLeft<>(e);
+			return new Either.Left<>(e);
 		}
 	}
 }

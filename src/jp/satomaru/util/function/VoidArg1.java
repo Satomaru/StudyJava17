@@ -1,6 +1,6 @@
 package jp.satomaru.util.function;
 
-import jp.satomaru.util.function.core.Arg1;
+import java.util.Optional;
 
 /**
  * 引数ひとつ戻り値なしの、例外をスローする関数です。
@@ -9,7 +9,7 @@ import jp.satomaru.util.function.core.Arg1;
  * @param <A1> 引数1
  */
 @FunctionalInterface
-public interface VoidArg1<A1> extends Arg1<A1, Void, RetArg0<Void>> {
+public interface VoidArg1<A1> {
 
 	/**
 	 * 実行します。
@@ -19,11 +19,35 @@ public interface VoidArg1<A1> extends Arg1<A1, Void, RetArg0<Void>> {
 	 */
 	void execute(A1 arg1) throws Exception;
 
-	@Override
-	default RetArg0<Void> inject(A1 arg1) {
-		return () -> {
+	/**
+	 * 引数1を注入します。
+	 *
+	 * @param arg1 引数1
+	 * @return 注入後の関数
+	 */
+	default VoidArg0 inject(A1 arg1) {
+		return () -> execute(arg1);
+	}
+
+	/**
+	 * 実行します。
+	 *
+	 * @param arg1 引数1
+	 * @return 発生した例外
+	 */
+	default Optional<Exception> run(A1 arg1) {
+		return inject(arg1).run();
+	}
+
+	/**
+	 * 実行後、引数1を返却する関数を作成します。
+	 *
+	 * @return 作成した関数
+	 */
+	default RetArg1<A1, A1> retA1() {
+		return arg1 -> {
 			execute(arg1);
-			return null;
+			return arg1;
 		};
 	}
 }

@@ -1,9 +1,6 @@
 package jp.satomaru.util.function;
 
-import jp.satomaru.util.either.Either;
-import jp.satomaru.util.either.EitherLeft;
-import jp.satomaru.util.either.EitherRight;
-import jp.satomaru.util.function.core.Arg0;
+import java.util.Optional;
 
 /**
  * 引数なし戻り値なしの、例外をスローする関数です。
@@ -11,7 +8,7 @@ import jp.satomaru.util.function.core.Arg0;
  * @author Satomaru
  */
 @FunctionalInterface
-public interface VoidArg0 extends Arg0<Void> {
+public interface VoidArg0 {
 
 	/**
 	 * 実行します。
@@ -20,13 +17,17 @@ public interface VoidArg0 extends Arg0<Void> {
 	 */
 	void execute() throws Exception;
 
-	@Override
-	default Either<Exception, Void> run() {
+	/**
+	 * 実行します。
+	 *
+	 * @return 発生した例外
+	 */
+	default Optional<Exception> run() {
 		try {
 			execute();
-			return new EitherRight<>(null);
+			return Optional.empty();
 		} catch (Exception e) {
-			return new EitherLeft<>(e);
+			return Optional.of(e);
 		}
 	}
 }

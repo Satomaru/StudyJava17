@@ -7,13 +7,18 @@ public class RetArg2Sample {
 	public static void main(String[] args) {
 		String result1 = Execute.of(RetArg2Sample::divide)
 			.run(10, 2)
-			.map(Object::toString, Object::toString);
+			.map(Exception::getMessage, Object::toString)
+			.get();
 
 		String result2 = Execute.of(RetArg2Sample::divide)
 			.run(10, 0)
-			.map(Object::toString, Object::toString);
+			.map(Exception::getMessage, Object::toString)
+			.get();
 
+		// STDOUT> divide(10, 2) -> 5
 		System.out.println(String.format("divide(10, 2) -> %s", result1));
+
+		// STDOUT> divide(10, 0) -> / by zero
 		System.out.println(String.format("divide(10, 0) -> %s", result2));
 	}
 

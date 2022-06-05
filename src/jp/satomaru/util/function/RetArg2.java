@@ -1,6 +1,6 @@
 package jp.satomaru.util.function;
 
-import jp.satomaru.util.function.core.Arg2;
+import jp.satomaru.util.Either;
 
 /**
  * 引数ふたつ戻り値ありの、例外をスローする関数です。
@@ -11,7 +11,7 @@ import jp.satomaru.util.function.core.Arg2;
  * @param <R>  戻り値
  */
 @FunctionalInterface
-public interface RetArg2<A1, A2, R> extends Arg2<A1, A2, R, RetArg1<A2, R>> {
+public interface RetArg2<A1, A2, R> {
 
 	/**
 	 * 実行します。
@@ -23,8 +23,24 @@ public interface RetArg2<A1, A2, R> extends Arg2<A1, A2, R, RetArg1<A2, R>> {
 	 */
 	R execute(A1 arg1, A2 arg2) throws Exception;
 
-	@Override
+	/**
+	 * 引数1を注入します。
+	 *
+	 * @param arg1 引数1
+	 * @return 注入後の関数
+	 */
 	default RetArg1<A2, R> inject(A1 arg1) {
 		return arg2 -> execute(arg1, arg2);
+	}
+
+	/**
+	 * 実行します。
+	 *
+	 * @param arg1 引数1
+	 * @param arg2 引数2
+	 * @return 実行結果
+	 */
+	default Either<Exception, R> run(A1 arg1, A2 arg2) {
+		return inject(arg1).inject(arg2).run();
 	}
 }
