@@ -26,11 +26,11 @@ public class DispatcherSample {
 		Param param = new Param(10, 2);
 		RetArg1<String, Integer> injected = DISPATCHER.inject(me, param);
 
-		injected.run("a").mapToString().ifPresent(result -> System.out.println("a: " + result));
-		injected.run("s").mapToString().ifPresent(result -> System.out.println("s: " + result));
-		injected.run("m").mapToString().ifPresent(result -> System.out.println("m: " + result));
-		injected.run("d").mapToString().ifPresent(result -> System.out.println("d: " + result));
-		injected.run("?").mapToString().ifPresent(result -> System.out.println("?: " + result));
+		injected.run("a").format("a: %s").ifPresent(System.out::println);
+		injected.run("s").format("s: %s").ifPresent(System.out::println);
+		injected.run("m").format("m: %s").ifPresent(System.out::println);
+		injected.run("d").format("d: %s").ifPresent(System.out::println);
+		injected.run("?").format("?: %s").ifPresent(System.out::println);
 	}
 
 	public int add(Param param) {

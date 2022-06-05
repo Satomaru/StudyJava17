@@ -123,10 +123,35 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	/**
 	 * 保持している値を文字列に変換します。
 	 *
-	 * @return 変換後の値
+	 * @return 文字列
 	 */
 	default Optional<String> mapToString() {
 		return optional().map(Object::toString);
+	}
+
+	/**
+	 * 保持している値を文字列に編集します。
+	 *
+	 * @param whenLeft  左の型を保持している場合に使用するフォーマット
+	 * @param whenRight 右の型を保持している場合に使用するフォーマット
+	 * @return 文字列
+	 */
+	default Optional<String> format(String whenLeft, String whenRight) {
+		if (isLeft()) {
+			return optionalLeft().map(left -> String.format(whenLeft, left));
+		} else {
+			return optionalRight().map(right -> String.format(whenRight, right));
+		}
+	}
+
+	/**
+	 * 保持している値を文字列に編集します。
+	 *
+	 * @param format フォーマット
+	 * @return 文字列
+	 */
+	default Optional<String> format(String format) {
+		return optional().map(value -> String.format(format, value));
 	}
 
 	/**
