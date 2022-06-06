@@ -1,51 +1,46 @@
 package sandbox;
 
-import java.util.function.IntBinaryOperator;
-
 import jp.satomaru.util.Dispatcher;
 import jp.satomaru.util.function.RetArg1;
+import jp.satomaru.util.function.RetArg3;
 
 public class DispatcherSample {
 
-	public record Param(int int1, int int2) {
-
-		public int calculate(IntBinaryOperator operator) {
-			return operator.applyAsInt(int1, int2);
-		}
+	public record Arguments(int value1, int value2) {
 	}
 
-	private static final Dispatcher<DispatcherSample, Param, Integer> DISPATCHER = new Dispatcher.Factory<DispatcherSample, Param, Integer>()
-		.add("a", DispatcherSample::add)
-		.add("s", DispatcherSample::subtract)
-		.add("m", DispatcherSample::multiply)
-		.add("d", DispatcherSample::divide)
+	private static final RetArg3<DispatcherSample, Arguments, String, Integer> DISPATCHER = Dispatcher
+		.begin("a", DispatcherSample::add)
+		.append("s", DispatcherSample::subtract)
+		.append("m", DispatcherSample::multiply)
+		.append("d", DispatcherSample::divide)
 		.end();
 
 	public static void main(String[] args) {
 		DispatcherSample me = new DispatcherSample();
-		Param param = new Param(10, 2);
-		RetArg1<String, Integer> injected = DISPATCHER.inject(me, param);
+		Arguments arguments = new Arguments(10, 2);
+		RetArg1<String, Integer> injected = DISPATCHER.inject(me).inject(arguments);
 
 		injected.run("a").format("a: %s").ifPresent(System.out::println);
 		injected.run("s").format("s: %s").ifPresent(System.out::println);
 		injected.run("m").format("m: %s").ifPresent(System.out::println);
 		injected.run("d").format("d: %s").ifPresent(System.out::println);
-		injected.run("?").format("?: %s").ifPresent(System.out::println);
+		injected.run("x").format("x: %s").ifPresent(System.out::println);
 	}
 
-	public int add(Param param) {
-		return param.calculate((int1, int2) -> int1 + int2);
+	public int add(Arguments arguments) {
+		return arguments.value1 + arguments.value2;
 	}
 
-	public int subtract(Param param) {
-		return param.calculate((int1, int2) -> int1 - int2);
+	public int subtract(Arguments arguments) {
+		return arguments.value1 - arguments.value2;
 	}
 
-	public int multiply(Param param) {
-		return param.calculate((int1, int2) -> int1 * int2);
+	public int multiply(Arguments arguments) {
+		return arguments.value1 * arguments.value2;
 	}
 
-	public int divide(Param param) {
-		return param.calculate((int1, int2) -> int1 / int2);
+	public int divide(Arguments arguments) {
+		return arguments.value1 / arguments.value2;
 	}
 }

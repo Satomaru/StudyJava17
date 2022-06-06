@@ -1,30 +1,75 @@
 package jp.satomaru.util;
 
 import java.util.HashMap;
-import java.util.function.Function;
+import java.util.Map;
 
-import jp.satomaru.util.function.RetArg1;
 import jp.satomaru.util.function.RetArg2;
+import jp.satomaru.util.function.RetArg3;
 
-@FunctionalInterface
-public interface Dispatcher<M, A, R> extends Function<String, RetArg2<M, A, R>> {
+/**
+ * 指定されたコマンドに対応する関数を選択する、ディスパッチャーを作成します。
+ *
+ * @author Satomaru
+ * @param <M> 実行する関数を持つオブジェクト
+ * @param <A> 関数の引数
+ * @param <C> コマンド
+ * @param <R> 結果
+ */
+public final class Dispatcher<M, A, C, R> {
 
-	public static final class Factory<M, A, R> {
-
-		private final HashMap<String, RetArg2<M, A, R>> commands = new HashMap<>();
-
-		public Factory<M, A, R> add(String key, RetArg2<M, A, R> command) {
-			commands.put(key, command);
-			return this;
-		}
-
-		public Dispatcher<M, A, R> end() {
-			HashMap<String, RetArg2<M, A, R>> fixed = new HashMap<>(commands);
-			return fixed::get;
-		}
+	/**
+	 * コマンドと、それに対応する関数を指定して、ディスパッチャーの作成を開始します。
+	 *
+	 * @param <M>       実行する関数を持つオブジェクト
+	 * @param <A>       関数の引数
+	 * @param <C>       コマンド
+	 * @param <R>       結果
+	 * @param command   コマンド
+	 * @param processor 実行する関数
+	 * @return ディスパッチャーを作成するオブジェクト
+	 */
+	public static final <M, A, C, R> Dispatcher<M, A, C, R> begin(C command, RetArg2<M, A, R> processor) {
+		var dispatcher = new Dispatcher<M, A, C, R>();
+		dispatcher.append(command, processor);
+		return dispatcher;
 	}
 
-	default RetArg1<String, R> inject(M model, A arg) {
-		return key -> apply(key).execute(model, arg);
+	/** 関数マップ。 */
+	private final HashMap<C, RetArg2<M, A, R>> processors = new HashMap<>();
+
+	private Dispatcher() {
+	}
+
+	/**
+	 * コマンドと、それに対応する関数を追加します。
+	 *
+	 * @param command   コマンド
+	 * @param processor 実行する関数
+	 * @return このオブジェクト自身
+	 */
+	public Dispatcher<M, A, C, R> append(C command, RetArg2<M, A, R> processor) {
+		processors.put(command, processor);
+		return this;
+	}
+
+	/**
+	 * ディスパッチャーの作成を終了します。
+	 *
+	 * @return ディスパッチャー
+	 */
+	public RetArg3<M, A, C, R> end() {
+		Map<C, RetArg2<M, A, R>> fixed = Map.copyOf(processors);
+
+		return (model, argument, command) -> {
+			if (command == null) {
+				throw new NullPointerException("command");
+			}
+
+			if (!fixed.containsKey(command)) {
+				throw new IllegalArgumentException(String.format("command: %s", command));
+			}
+
+			return fixed.get(command).execute(model, argument);
+		};
 	}
 }
