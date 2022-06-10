@@ -21,12 +21,12 @@ import jp.satomaru.util.container.element.parser.ElementParser;
 public class ElementSample {
 
 	public static void main(String[] args) throws ElementException {
-		Element<?> element1 = Element.of("element", "2022/06/11 02:45:30.125");
-		Element<?> element2 = element1.accept(ElementParser.LOCALDATETIME);
-		Element<?> element3 = element2.accept(ElementParser.LONG);
-		Element<?> element4 = element3.accept(ElementParser.INSTANT);
-		Element<?> element5 = element4.accept(ElementParser.LOCALDATETIME);
-		Element<?> element6 = element5.accept(ElementParser.STRING);
+		var element1 = Element.of("element", "2022/06/11 02:45:30.125");
+		var element2 = element1.accept(ElementParser.LOCALDATETIME);
+		var element3 = element2.accept(ElementParser.LONG);
+		var element4 = element3.accept(ElementParser.INSTANT);
+		var element5 = element4.accept(ElementParser.LOCALDATETIME);
+		var element6 = element5.accept(ElementParser.STRING);
 
 		System.out.println(element1.description());
 		System.out.println(element2.description());
