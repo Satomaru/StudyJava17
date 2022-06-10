@@ -19,10 +19,7 @@ public class VoidArg2Sample {
 			.map(Exception::getMessage)
 			.orElse("succeeded");
 
-		// STDOUT> set(0, "new0") -> succeeded
 		System.out.println(String.format("set(0, \"new0\") -> %s", result1));
-
-		// STDOUT> set(1, "new1") -> Index 1 out of bounds for length 1
 		System.out.println(String.format("set(1, \"new1\") -> %s", result2));
 	}
 

@@ -15,10 +15,7 @@ public class RetArg2Sample {
 			.map(Exception::getMessage, Object::toString)
 			.get();
 
-		// STDOUT> divide(10, 2) -> 5
 		System.out.println(String.format("divide(10, 2) -> %s", result1));
-
-		// STDOUT> divide(10, 0) -> / by zero
 		System.out.println(String.format("divide(10, 0) -> %s", result2));
 	}
 
