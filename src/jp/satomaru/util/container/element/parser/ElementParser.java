@@ -1,9 +1,10 @@
 package jp.satomaru.util.container.element.parser;
 
-import jp.satomaru.util.container.element.Element;
 import jp.satomaru.util.container.element.BooleanElement;
 import jp.satomaru.util.container.element.DoubleElement;
+import jp.satomaru.util.container.element.Element;
 import jp.satomaru.util.container.element.ElementException;
+import jp.satomaru.util.container.element.ElementException.Type;
 import jp.satomaru.util.container.element.InstantElement;
 import jp.satomaru.util.container.element.IntegerElement;
 import jp.satomaru.util.container.element.LocalDateTimeElement;
@@ -11,7 +12,7 @@ import jp.satomaru.util.container.element.LongElement;
 import jp.satomaru.util.container.element.StringElement;
 import jp.satomaru.util.function.RetArg1;
 
-public sealed interface ElementParser<V, E extends Element<V>> permits ToBoolean, ToDouble, ToInstant, ToInteger, ToLocalDateTime, ToLong, ToString {
+public sealed abstract class ElementParser<V, E extends Element<V>> permits ToBoolean, ToDouble, ToInstant, ToInteger, ToLocalDateTime, ToLong, ToString {
 
 	public static final ToBoolean BOOLEAN = new ToBoolean();
 	public static final ToDouble DOUBLE = new ToDouble();
@@ -21,21 +22,49 @@ public sealed interface ElementParser<V, E extends Element<V>> permits ToBoolean
 	public static final ToLong LONG = new ToLong();
 	public static final ToString STRING = new ToString();
 
-	E set(Element<?> element, V newValue);
+	public E parse(BooleanElement element) throws ElementException {
+		throw new ElementException(element, typeWhenParseFailure());
+	}
 
-	<F> E parse(Element<F> element, RetArg1<F, V> parser) throws ElementException;
+	public E parse(DoubleElement element) throws ElementException {
+		throw new ElementException(element, typeWhenParseFailure());
+	}
 
-	E parse(BooleanElement element) throws ElementException;
+	public E parse(InstantElement element) throws ElementException {
+		throw new ElementException(element, typeWhenParseFailure());
+	}
 
-	E parse(DoubleElement element) throws ElementException;
+	public E parse(IntegerElement element) throws ElementException {
+		throw new ElementException(element, typeWhenParseFailure());
+	}
 
-	E parse(InstantElement element) throws ElementException;
+	public E parse(LocalDateTimeElement element) throws ElementException {
+		throw new ElementException(element, typeWhenParseFailure());
+	}
 
-	E parse(IntegerElement element) throws ElementException;
+	public E parse(LongElement element) throws ElementException {
+		throw new ElementException(element, typeWhenParseFailure());
+	}
 
-	E parse(LocalDateTimeElement element) throws ElementException;
+	public E parse(StringElement element) throws ElementException {
+		throw new ElementException(element, typeWhenParseFailure());
+	}
 
-	E parse(LongElement element) throws ElementException;
+	protected final <F> E parse(Element<F> element, RetArg1<F, V> parser) throws ElementException {
+		try {
+			if (element.isEmpty()) {
+				return set(element, null);
+			}
 
-	E parse(StringElement element) throws ElementException;
+			return set(element, parser.execute(element.value()));
+		} catch (ElementException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new ElementException(element, typeWhenParseFailure(), e);
+		}
+	}
+
+	protected abstract E set(Element<?> element, V newValue);
+
+	protected abstract Type typeWhenParseFailure();
 }
