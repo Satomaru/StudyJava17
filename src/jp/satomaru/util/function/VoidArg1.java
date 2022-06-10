@@ -3,46 +3,46 @@ package jp.satomaru.util.function;
 import java.util.Optional;
 
 /**
- * ˆø”‚Ğ‚Æ‚Â–ß‚è’l‚È‚µ‚ÌA—áŠO‚ğƒXƒ[‚·‚éŠÖ”‚Å‚·B
+ * å¼•æ•°ã²ã¨ã¤æˆ»ã‚Šå€¤ãªã—ã®ã€ä¾‹å¤–ã‚’ã‚¹ãƒ­ãƒ¼ã™ã‚‹é–¢æ•°ã§ã™ã€‚
  *
  * @author Satomaru
- * @param <A1> ˆø”1
+ * @param <A1> å¼•æ•°1
  */
 @FunctionalInterface
 public interface VoidArg1<A1> {
 
 	/**
-	 * Às‚µ‚Ü‚·B
+	 * å®Ÿè¡Œã—ã¾ã™ã€‚
 	 *
-	 * @param arg1 ˆø”1
-	 * @throws Exception ˆÙí‚ª”­¶‚µ‚½ê‡
+	 * @param arg1 å¼•æ•°1
+	 * @throws Exception ç•°å¸¸ãŒç™ºç”Ÿã—ãŸå ´åˆ
 	 */
 	void execute(A1 arg1) throws Exception;
 
 	/**
-	 * ˆø”1‚ğ’“ü‚µ‚Ü‚·B
+	 * å¼•æ•°1ã‚’æ³¨å…¥ã—ã¾ã™ã€‚
 	 *
-	 * @param arg1 ˆø”1
-	 * @return ’“üŒã‚ÌŠÖ”
+	 * @param arg1 å¼•æ•°1
+	 * @return æ³¨å…¥å¾Œã®é–¢æ•°
 	 */
 	default VoidArg0 inject(A1 arg1) {
 		return () -> execute(arg1);
 	}
 
 	/**
-	 * Às‚µ‚Ü‚·B
+	 * å®Ÿè¡Œã—ã¾ã™ã€‚
 	 *
-	 * @param arg1 ˆø”1
-	 * @return ”­¶‚µ‚½—áŠO
+	 * @param arg1 å¼•æ•°1
+	 * @return ç™ºç”Ÿã—ãŸä¾‹å¤–
 	 */
 	default Optional<Exception> run(A1 arg1) {
 		return inject(arg1).run();
 	}
 
 	/**
-	 * ÀsŒãAˆø”1‚ğ•Ô‹p‚·‚éŠÖ”‚ğì¬‚µ‚Ü‚·B
+	 * å®Ÿè¡Œå¾Œã€å¼•æ•°1ã‚’è¿”å´ã™ã‚‹é–¢æ•°ã‚’ä½œæˆã—ã¾ã™ã€‚
 	 *
-	 * @return ì¬‚µ‚½ŠÖ”
+	 * @return ä½œæˆã—ãŸé–¢æ•°
 	 */
 	default RetArg1<A1, A1> retA1() {
 		return arg1 -> {

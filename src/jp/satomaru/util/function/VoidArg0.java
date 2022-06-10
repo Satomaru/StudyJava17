@@ -3,7 +3,7 @@ package jp.satomaru.util.function;
 import java.util.Optional;
 
 /**
- * ˆø”‚È‚µ–ß‚è’l‚È‚µ‚ÌA—áŠO‚ğƒXƒ[‚·‚éŠÖ”‚Å‚·B
+ * å¼•æ•°ãªã—æˆ»ã‚Šå€¤ãªã—ã®ã€ä¾‹å¤–ã‚’ã‚¹ãƒ­ãƒ¼ã™ã‚‹é–¢æ•°ã§ã™ã€‚
  *
  * @author Satomaru
  */
@@ -11,16 +11,16 @@ import java.util.Optional;
 public interface VoidArg0 {
 
 	/**
-	 * Às‚µ‚Ü‚·B
+	 * å®Ÿè¡Œã—ã¾ã™ã€‚
 	 *
-	 * @throws Exception ˆÙí‚ª”­¶‚µ‚½ê‡
+	 * @throws Exception ç•°å¸¸ãŒç™ºç”Ÿã—ãŸå ´åˆ
 	 */
 	void execute() throws Exception;
 
 	/**
-	 * Às‚µ‚Ü‚·B
+	 * å®Ÿè¡Œã—ã¾ã™ã€‚
 	 *
-	 * @return ”­¶‚µ‚½—áŠO
+	 * @return ç™ºç”Ÿã—ãŸä¾‹å¤–
 	 */
 	default Optional<Exception> run() {
 		try {

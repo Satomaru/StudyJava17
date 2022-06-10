@@ -5,7 +5,7 @@ import jp.satomaru.util.container.element.ElementException;
 import jp.satomaru.util.container.element.parser.ElementParser;
 
 /**
- * Element‚ÌƒTƒ“ƒvƒ‹B
+ * Elementã®ã‚µãƒ³ãƒ—ãƒ«ã€‚
  *
  * <pre>
  *   {&lt;String&gt; element: 2022/06/11 02:45:30.125}

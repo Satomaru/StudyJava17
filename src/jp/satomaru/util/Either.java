@@ -8,19 +8,19 @@ import jp.satomaru.util.Either.Left;
 import jp.satomaru.util.Either.Right;
 
 /**
- * ‚Ó‚½‚Â‚ÌŒ^‚Ì“à‚Ì‚Ç‚¿‚ç‚©‚ğ•Û‚µ‚Ü‚·B
+ * ãµãŸã¤ã®å‹ã®å†…ã®ã©ã¡ã‚‰ã‹ã‚’ä¿æŒã—ã¾ã™ã€‚
  *
  * @author Satomaru
- * @param <L> ¶‚ÌŒ^
- * @param <R> ‰E‚ÌŒ^
+ * @param <L> å·¦ã®å‹
+ * @param <R> å³ã®å‹
  */
 public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 
 	/**
-	 * ¶‚ÌŒ^‚ğ•Û‚µ‚Ü‚·B
+	 * å·¦ã®å‹ã‚’ä¿æŒã—ã¾ã™ã€‚
 	 *
-	 * @param <L> ¶‚ÌŒ^
-	 * @param <R> ‰E‚ÌŒ^
+	 * @param <L> å·¦ã®å‹
+	 * @param <R> å³ã®å‹
 	 */
 	public record Left<L, R> (L value) implements Either<L, R> {
 
@@ -77,10 +77,10 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	}
 
 	/**
-	 * ‰E‚ÌŒ^‚ğ•Û‚µ‚Ü‚·B
+	 * å³ã®å‹ã‚’ä¿æŒã—ã¾ã™ã€‚
 	 *
-	 * @param <L> ¶‚ÌŒ^
-	 * @param <R> ‰E‚ÌŒ^
+	 * @param <L> å·¦ã®å‹
+	 * @param <R> å³ã®å‹
 	 */
 	public record Right<L, R> (R value) implements Either<L, R> {
 
@@ -137,9 +137,9 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	}
 
 	/**
-	 * •Û‚µ‚Ä‚¢‚é’l‚ğæ“¾‚µ‚Ü‚·B
+	 * ä¿æŒã—ã¦ã„ã‚‹å€¤ã‚’å–å¾—ã—ã¾ã™ã€‚
 	 *
-	 * @return •Û‚µ‚Ä‚¢‚é’l
+	 * @return ä¿æŒã—ã¦ã„ã‚‹å€¤
 	 * @see #optional()
 	 * @see #optionalLeft()
 	 * @see #optionalRight()
@@ -147,17 +147,17 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	Object value();
 
 	/**
-	 * ¶‚ÌŒ^‚ğ•Û‚µ‚Ä‚¢‚é‚±‚Æ‚ğ”»’è‚µ‚Ü‚·B
+	 * å·¦ã®å‹ã‚’ä¿æŒã—ã¦ã„ã‚‹ã“ã¨ã‚’åˆ¤å®šã—ã¾ã™ã€‚
 	 *
-	 * @return ¶‚ÌŒ^‚ğ•Û‚µ‚Ä‚¢‚éê‡‚Ítrue
+	 * @return å·¦ã®å‹ã‚’ä¿æŒã—ã¦ã„ã‚‹å ´åˆã¯true
 	 * @see #isRight()
 	 */
 	boolean isLeft();
 
 	/**
-	 * •Û‚µ‚Ä‚¢‚é’l‚ğæ“¾‚µ‚Ü‚·B
+	 * ä¿æŒã—ã¦ã„ã‚‹å€¤ã‚’å–å¾—ã—ã¾ã™ã€‚
 	 *
-	 * @return •Û‚µ‚Ä‚¢‚é’l
+	 * @return ä¿æŒã—ã¦ã„ã‚‹å€¤
 	 * @see #value()
 	 * @see #optionalLeft()
 	 * @see #optionalRight()
@@ -165,9 +165,9 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	Optional<?> optional();
 
 	/**
-	 * ¶‚Ì’l‚ğ•Û‚µ‚Ä‚¢‚éê‡A’l‚ğæ“¾‚µ‚Ü‚·B
+	 * å·¦ã®å€¤ã‚’ä¿æŒã—ã¦ã„ã‚‹å ´åˆã€å€¤ã‚’å–å¾—ã—ã¾ã™ã€‚
 	 *
-	 * @return •Û‚µ‚Ä‚¢‚é’l
+	 * @return ä¿æŒã—ã¦ã„ã‚‹å€¤
 	 * @see #value()
 	 * @see #optional()
 	 * @see #optionalRight()
@@ -175,9 +175,9 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	Optional<L> optionalLeft();
 
 	/**
-	 * ‰E‚Ì’l‚ğ•Û‚µ‚Ä‚¢‚éê‡A’l‚ğæ“¾‚µ‚Ü‚·B
+	 * å³ã®å€¤ã‚’ä¿æŒã—ã¦ã„ã‚‹å ´åˆã€å€¤ã‚’å–å¾—ã—ã¾ã™ã€‚
 	 *
-	 * @return •Û‚µ‚Ä‚¢‚é’l
+	 * @return ä¿æŒã—ã¦ã„ã‚‹å€¤
 	 * @see #value()
 	 * @see #optional()
 	 * @see #optionalLeft()
@@ -185,12 +185,12 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	Optional<R> optionalRight();
 
 	/**
-	 * •Û‚µ‚Ä‚¢‚é’l‚ªA‰E‚ÌŒ^‚Ìê‡‚Í•Ô‹p‚µA¶‚ÌŒ^‚Ìê‡‚ÍƒXƒ[‚µ‚Ü‚·B
+	 * ä¿æŒã—ã¦ã„ã‚‹å€¤ãŒã€å³ã®å‹ã®å ´åˆã¯è¿”å´ã—ã€å·¦ã®å‹ã®å ´åˆã¯ã‚¹ãƒ­ãƒ¼ã—ã¾ã™ã€‚
 	 *
-	 * @param <E>       ƒXƒ[‚·‚é—áŠO
-	 * @param generator ¶‚ÌŒ^‚©‚ç—áŠO‚ğ¶¬‚·‚éŠÖ”
-	 * @return ‰E‚Ì’l
-	 * @throws E ¶‚Ì’l‚ğ•Û‚µ‚Ä‚¢‚½ê‡
+	 * @param <E>       ã‚¹ãƒ­ãƒ¼ã™ã‚‹ä¾‹å¤–
+	 * @param generator å·¦ã®å‹ã‹ã‚‰ä¾‹å¤–ã‚’ç”Ÿæˆã™ã‚‹é–¢æ•°
+	 * @return å³ã®å€¤
+	 * @throws E å·¦ã®å€¤ã‚’ä¿æŒã—ã¦ã„ãŸå ´åˆ
 	 * @see #orElseThrowRuntime(Function, Function)
 	 * @see #orElseIllegalArgument()
 	 * @see #orElseIllegalState()
@@ -198,12 +198,12 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	<E extends Exception> R orElseThrow(Function<L, E> generator) throws E;
 
 	/**
-	 * •Û‚µ‚Ä‚¢‚é’l‚ğ•ÏŠ·‚µ‚Ü‚·B
+	 * ä¿æŒã—ã¦ã„ã‚‹å€¤ã‚’å¤‰æ›ã—ã¾ã™ã€‚
 	 *
-	 * @param <T>       •ÏŠ·Œã
-	 * @param whenLeft  ¶‚ÌŒ^‚ğ•Û‚µ‚Ä‚¢‚éê‡‚Ég—p‚·‚éŠÖ”
-	 * @param whenRight ‰E‚ÌŒ^‚ğ•Û‚µ‚Ä‚¢‚éê‡‚Ég—p‚·‚éŠÖ”
-	 * @return •ÏŠ·Œã‚Ì’l
+	 * @param <T>       å¤‰æ›å¾Œ
+	 * @param whenLeft  å·¦ã®å‹ã‚’ä¿æŒã—ã¦ã„ã‚‹å ´åˆã«ä½¿ç”¨ã™ã‚‹é–¢æ•°
+	 * @param whenRight å³ã®å‹ã‚’ä¿æŒã—ã¦ã„ã‚‹å ´åˆã«ä½¿ç”¨ã™ã‚‹é–¢æ•°
+	 * @return å¤‰æ›å¾Œã®å€¤
 	 * @see #mapLeft(Function)
 	 * @see #mapRight(Function)
 	 * @see #mapToString()
@@ -212,49 +212,49 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	<T> Optional<T> map(Function<? super L, T> whenLeft, Function<? super R, T> whenRight);
 
 	/**
-	 * ¶‚Ì’l‚ğ•ÏŠ·‚µ‚Ü‚·B
+	 * å·¦ã®å€¤ã‚’å¤‰æ›ã—ã¾ã™ã€‚
 	 *
-	 * @param <L2>   V‚µ‚¢¶‚Ì’l
-	 * @param mapper •ÏŠ·‚·‚éŠÖ”
-	 * @return •ÏŠ·Œã‚ÌƒIƒuƒWƒFƒNƒg
+	 * @param <L2>   æ–°ã—ã„å·¦ã®å€¤
+	 * @param mapper å¤‰æ›ã™ã‚‹é–¢æ•°
+	 * @return å¤‰æ›å¾Œã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	 * @see #map(Function, Function)
 	 * @see #mapRight(Function)
 	 */
 	<L2> Either<L2, R> mapLeft(Function<L, L2> mapper);
 
 	/**
-	 * ‰E‚Ì’l‚ğ•ÏŠ·‚µ‚Ü‚·B
+	 * å³ã®å€¤ã‚’å¤‰æ›ã—ã¾ã™ã€‚
 	 *
-	 * @param <R2>   V‚µ‚¢‰E‚Ì’l
-	 * @param mapper •ÏŠ·‚·‚éŠÖ”
-	 * @return •ÏŠ·Œã‚ÌƒIƒuƒWƒFƒNƒg
+	 * @param <R2>   æ–°ã—ã„å³ã®å€¤
+	 * @param mapper å¤‰æ›ã™ã‚‹é–¢æ•°
+	 * @return å¤‰æ›å¾Œã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	 * @see #map(Function, Function)
 	 * @see #mapLeft(Function)
 	 */
 	<R2> Either<L, R2> mapRight(Function<R, R2> mapper);
 
 	/**
-	 * ¶‚Ì’l‚ğ•Û‚µ‚Ä‚¢‚ÄA‚©‚Â’l‚ªnull‚Å‚Í‚È‚¢ê‡Aw’è‚³‚ê‚½ŠÖ”‚ğÀs‚µ‚Ü‚·B
+	 * å·¦ã®å€¤ã‚’ä¿æŒã—ã¦ã„ã¦ã€ã‹ã¤å€¤ãŒnullã§ã¯ãªã„å ´åˆã€æŒ‡å®šã•ã‚ŒãŸé–¢æ•°ã‚’å®Ÿè¡Œã—ã¾ã™ã€‚
 	 *
-	 * @param action Às‚·‚éŠÖ”
-	 * @return ‚±‚ÌƒIƒuƒWƒFƒNƒg©g
+	 * @param action å®Ÿè¡Œã™ã‚‹é–¢æ•°
+	 * @return ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè‡ªèº«
 	 * @see #ifPresentRight(Consumer)
 	 */
 	Either<L, R> ifPresentLeft(Consumer<? super L> action);
 
 	/**
-	 * ‰E‚Ì’l‚ğ•Û‚µ‚Ä‚¢‚ÄA‚©‚Â’l‚ªnull‚Å‚Í‚È‚¢ê‡Aw’è‚³‚ê‚½ŠÖ”‚ğÀs‚µ‚Ü‚·B
+	 * å³ã®å€¤ã‚’ä¿æŒã—ã¦ã„ã¦ã€ã‹ã¤å€¤ãŒnullã§ã¯ãªã„å ´åˆã€æŒ‡å®šã•ã‚ŒãŸé–¢æ•°ã‚’å®Ÿè¡Œã—ã¾ã™ã€‚
 	 *
-	 * @param action Às‚·‚éŠÖ”
-	 * @return ‚±‚ÌƒIƒuƒWƒFƒNƒg©g
+	 * @param action å®Ÿè¡Œã™ã‚‹é–¢æ•°
+	 * @return ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè‡ªèº«
 	 * @see #ifPresentLeft(Consumer)
 	 */
 	Either<L, R> ifPresentRight(Consumer<? super R> action);
 
 	/**
-	 * ‰E‚ÌŒ^‚ğ•Û‚µ‚Ä‚¢‚é‚±‚Æ‚ğ”»’è‚µ‚Ü‚·B
+	 * å³ã®å‹ã‚’ä¿æŒã—ã¦ã„ã‚‹ã“ã¨ã‚’åˆ¤å®šã—ã¾ã™ã€‚
 	 *
-	 * @return ‰E‚ÌŒ^‚ğ•Û‚µ‚Ä‚¢‚éê‡‚Ítrue
+	 * @return å³ã®å‹ã‚’ä¿æŒã—ã¦ã„ã‚‹å ´åˆã¯true
 	 * @see #isLeft()
 	 */
 	default boolean isRight() {
@@ -262,12 +262,12 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	}
 
 	/**
-	 * •Û‚µ‚Ä‚¢‚é’l‚ªA‰E‚ÌŒ^‚Ìê‡‚Í•Ô‹p‚µA¶‚ÌŒ^‚Ìê‡‚ÍÀs—áŠO‚ğƒXƒ[‚µ‚Ü‚·B
+	 * ä¿æŒã—ã¦ã„ã‚‹å€¤ãŒã€å³ã®å‹ã®å ´åˆã¯è¿”å´ã—ã€å·¦ã®å‹ã®å ´åˆã¯å®Ÿè¡Œæ™‚ä¾‹å¤–ã‚’ã‚¹ãƒ­ãƒ¼ã—ã¾ã™ã€‚
 	 *
-	 * @param <E>              Às—áŠO
-	 * @param exceptionWrapper ¶‚ÌŒ^‚ª—áŠO‚¾‚Á‚½ê‡‚ÉÀs—áŠO‚ğì¬‚·‚éŠÖ”
-	 * @param stringWrapper    ¶‚ÌŒ^‚ª—áŠO‚Å‚Í‚È‚©‚Á‚½ê‡‚ÉÀs—áŠO‚ğì¬‚·‚éŠÖ”
-	 * @return ‰E‚Ì’l
+	 * @param <E>              å®Ÿè¡Œæ™‚ä¾‹å¤–
+	 * @param exceptionWrapper å·¦ã®å‹ãŒä¾‹å¤–ã ã£ãŸå ´åˆã«å®Ÿè¡Œæ™‚ä¾‹å¤–ã‚’ä½œæˆã™ã‚‹é–¢æ•°
+	 * @param stringWrapper    å·¦ã®å‹ãŒä¾‹å¤–ã§ã¯ãªã‹ã£ãŸå ´åˆã«å®Ÿè¡Œæ™‚ä¾‹å¤–ã‚’ä½œæˆã™ã‚‹é–¢æ•°
+	 * @return å³ã®å€¤
 	 * @see #orElseThrow(Function)
 	 * @see #orElseIllegalArgument()
 	 * @see #orElseIllegalState()
@@ -294,9 +294,9 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	}
 
 	/**
-	 * •Û‚µ‚Ä‚¢‚é’l‚ªA‰E‚ÌŒ^‚Ìê‡‚Í•Ô‹p‚µA¶‚ÌŒ^‚Ìê‡‚Í•s³ˆø”—áŠO‚ğƒXƒ[‚µ‚Ü‚·B
+	 * ä¿æŒã—ã¦ã„ã‚‹å€¤ãŒã€å³ã®å‹ã®å ´åˆã¯è¿”å´ã—ã€å·¦ã®å‹ã®å ´åˆã¯ä¸æ­£å¼•æ•°ä¾‹å¤–ã‚’ã‚¹ãƒ­ãƒ¼ã—ã¾ã™ã€‚
 	 *
-	 * @return ‰E‚Ì’l
+	 * @return å³ã®å€¤
 	 * @see #orElseThrow(Function)
 	 * @see #orElseThrowRuntime(Function, Function)
 	 * @see #orElseIllegalState()
@@ -308,9 +308,9 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	}
 
 	/**
-	 * •Û‚µ‚Ä‚¢‚é’l‚ªA‰E‚ÌŒ^‚Ìê‡‚Í•Ô‹p‚µA¶‚ÌŒ^‚Ìê‡‚Í•s³ó‘Ô—áŠO‚ğƒXƒ[‚µ‚Ü‚·B
+	 * ä¿æŒã—ã¦ã„ã‚‹å€¤ãŒã€å³ã®å‹ã®å ´åˆã¯è¿”å´ã—ã€å·¦ã®å‹ã®å ´åˆã¯ä¸æ­£çŠ¶æ…‹ä¾‹å¤–ã‚’ã‚¹ãƒ­ãƒ¼ã—ã¾ã™ã€‚
 	 *
-	 * @return ‰E‚Ì’l
+	 * @return å³ã®å€¤
 	 * @see #orElseThrow(Function)
 	 * @see #orElseThrowRuntime(Function, Function)
 	 * @see #orElseIllegalArgument()
@@ -322,9 +322,9 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	}
 
 	/**
-	 * •Û‚µ‚Ä‚¢‚é’l‚ğ•¶š—ñ‚É•ÏŠ·‚µ‚Ü‚·B
+	 * ä¿æŒã—ã¦ã„ã‚‹å€¤ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã—ã¾ã™ã€‚
 	 *
-	 * @return •¶š—ñ
+	 * @return æ–‡å­—åˆ—
 	 * @see #map(Function, Function)
 	 * @see #format(String)
 	 */
@@ -333,10 +333,10 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	}
 
 	/**
-	 * •Û‚µ‚Ä‚¢‚é’l‚ğ•¶š—ñ‚É•ÒW‚µ‚Ü‚·B
+	 * ä¿æŒã—ã¦ã„ã‚‹å€¤ã‚’æ–‡å­—åˆ—ã«ç·¨é›†ã—ã¾ã™ã€‚
 	 *
-	 * @param format ƒtƒH[ƒ}ƒbƒg ({@link java.util.Formatter}‚Æ“¯‚¶)
-	 * @return •¶š—ñ
+	 * @param format ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ ({@link java.util.Formatter}ã¨åŒã˜)
+	 * @return æ–‡å­—åˆ—
 	 * @see #map(Function, Function)
 	 * @see #mapToString()
 	 */

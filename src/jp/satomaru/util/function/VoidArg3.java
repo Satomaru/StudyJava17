@@ -3,52 +3,52 @@ package jp.satomaru.util.function;
 import java.util.Optional;
 
 /**
- * ˆø”‚İ‚Á‚Â–ß‚è’l‚È‚µ‚ÌA—áŠO‚ğƒXƒ[‚·‚éŠÖ”‚Å‚·B
+ * å¼•æ•°ã¿ã£ã¤æˆ»ã‚Šå€¤ãªã—ã®ã€ä¾‹å¤–ã‚’ã‚¹ãƒ­ãƒ¼ã™ã‚‹é–¢æ•°ã§ã™ã€‚
  *
  * @author Satomaru
- * @param <A1> ˆø”1
- * @param <A2> ˆø”2
- * @param <A3> ˆø”3
+ * @param <A1> å¼•æ•°1
+ * @param <A2> å¼•æ•°2
+ * @param <A3> å¼•æ•°3
  */
 @FunctionalInterface
 public interface VoidArg3<A1, A2, A3> {
 
 	/**
-	 * Às‚µ‚Ü‚·B
+	 * å®Ÿè¡Œã—ã¾ã™ã€‚
 	 *
-	 * @param arg1 ˆø”1
-	 * @param arg2 ˆø”2
-	 * @param arg3 ˆø”3
-	 * @throws Exception ˆÙí‚ª”­¶‚µ‚½ê‡
+	 * @param arg1 å¼•æ•°1
+	 * @param arg2 å¼•æ•°2
+	 * @param arg3 å¼•æ•°3
+	 * @throws Exception ç•°å¸¸ãŒç™ºç”Ÿã—ãŸå ´åˆ
 	 */
 	void execute(A1 arg1, A2 arg2, A3 arg3) throws Exception;
 
 	/**
-	 * ˆø”1‚ğ’“ü‚µ‚Ü‚·B
+	 * å¼•æ•°1ã‚’æ³¨å…¥ã—ã¾ã™ã€‚
 	 *
-	 * @param arg1 ˆø”1
-	 * @return ’“üŒã‚ÌŠÖ”
+	 * @param arg1 å¼•æ•°1
+	 * @return æ³¨å…¥å¾Œã®é–¢æ•°
 	 */
 	default VoidArg2<A2, A3> inject(A1 arg1) {
 		return (arg2, arg3) -> execute(arg1, arg2, arg3);
 	}
 
 	/**
-	 * Às‚µ‚Ü‚·B
+	 * å®Ÿè¡Œã—ã¾ã™ã€‚
 	 *
-	 * @param arg1 ˆø”1
-	 * @param arg2 ˆø”2
-	 * @param arg3 ˆø”3
-	 * @return ”­¶‚µ‚½—áŠO
+	 * @param arg1 å¼•æ•°1
+	 * @param arg2 å¼•æ•°2
+	 * @param arg3 å¼•æ•°3
+	 * @return ç™ºç”Ÿã—ãŸä¾‹å¤–
 	 */
 	default Optional<Exception> run(A1 arg1, A2 arg2, A3 arg3) {
 		return inject(arg1).inject(arg2).inject(arg3).run();
 	}
 
 	/**
-	 * ÀsŒãAˆø”1‚ğ•Ô‹p‚·‚éŠÖ”‚ğì¬‚µ‚Ü‚·B
+	 * å®Ÿè¡Œå¾Œã€å¼•æ•°1ã‚’è¿”å´ã™ã‚‹é–¢æ•°ã‚’ä½œæˆã—ã¾ã™ã€‚
 	 *
-	 * @return ì¬‚µ‚½ŠÖ”
+	 * @return ä½œæˆã—ãŸé–¢æ•°
 	 */
 	default RetArg3<A1, A2, A3, A1> retA1() {
 		return (arg1, arg2, arg3) -> {
@@ -58,9 +58,9 @@ public interface VoidArg3<A1, A2, A3> {
 	}
 
 	/**
-	 * ÀsŒãAˆø”2‚ğ•Ô‹p‚·‚éŠÖ”‚ğì¬‚µ‚Ü‚·B
+	 * å®Ÿè¡Œå¾Œã€å¼•æ•°2ã‚’è¿”å´ã™ã‚‹é–¢æ•°ã‚’ä½œæˆã—ã¾ã™ã€‚
 	 *
-	 * @return ì¬‚µ‚½ŠÖ”
+	 * @return ä½œæˆã—ãŸé–¢æ•°
 	 */
 	default RetArg3<A1, A2, A3, A2> retA2() {
 		return (arg1, arg2, arg3) -> {
@@ -70,9 +70,9 @@ public interface VoidArg3<A1, A2, A3> {
 	}
 
 	/**
-	 * ÀsŒãAˆø”3‚ğ•Ô‹p‚·‚éŠÖ”‚ğì¬‚µ‚Ü‚·B
+	 * å®Ÿè¡Œå¾Œã€å¼•æ•°3ã‚’è¿”å´ã™ã‚‹é–¢æ•°ã‚’ä½œæˆã—ã¾ã™ã€‚
 	 *
-	 * @return ì¬‚µ‚½ŠÖ”
+	 * @return ä½œæˆã—ãŸé–¢æ•°
 	 */
 	default RetArg3<A1, A2, A3, A3> retA3() {
 		return (arg1, arg2, arg3) -> {

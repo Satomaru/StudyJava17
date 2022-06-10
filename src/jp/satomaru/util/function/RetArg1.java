@@ -3,39 +3,39 @@ package jp.satomaru.util.function;
 import jp.satomaru.util.Either;
 
 /**
- * ˆø”‚Ğ‚Æ‚Â–ß‚è’l‚ ‚è‚ÌA—áŠO‚ğƒXƒ[‚·‚éŠÖ”‚Å‚·B
+ * å¼•æ•°ã²ã¨ã¤æˆ»ã‚Šå€¤ã‚ã‚Šã®ã€ä¾‹å¤–ã‚’ã‚¹ãƒ­ãƒ¼ã™ã‚‹é–¢æ•°ã§ã™ã€‚
  *
  * @author Satomaru
- * @param <A1> ˆø”1
- * @param <R>  –ß‚è’l
+ * @param <A1> å¼•æ•°1
+ * @param <R>  æˆ»ã‚Šå€¤
  */
 @FunctionalInterface
 public interface RetArg1<A1, R> {
 
 	/**
-	 * Às‚µ‚Ü‚·B
+	 * å®Ÿè¡Œã—ã¾ã™ã€‚
 	 *
-	 * @param arg1 ˆø”1
-	 * @return ÀsŒ‹‰Ê
-	 * @throws Exception ˆÙí‚ª”­¶‚µ‚½ê‡
+	 * @param arg1 å¼•æ•°1
+	 * @return å®Ÿè¡Œçµæœ
+	 * @throws Exception ç•°å¸¸ãŒç™ºç”Ÿã—ãŸå ´åˆ
 	 */
 	R execute(A1 arg1) throws Exception;
 
 	/**
-	 * ˆø”1‚ğ’“ü‚µ‚Ü‚·B
+	 * å¼•æ•°1ã‚’æ³¨å…¥ã—ã¾ã™ã€‚
 	 *
-	 * @param arg1 ˆø”1
-	 * @return ’“üŒã‚ÌŠÖ”
+	 * @param arg1 å¼•æ•°1
+	 * @return æ³¨å…¥å¾Œã®é–¢æ•°
 	 */
 	default RetArg0<R> inject(A1 arg1) {
 		return () -> execute(arg1);
 	}
 
 	/**
-	 * Às‚µ‚Ü‚·B
+	 * å®Ÿè¡Œã—ã¾ã™ã€‚
 	 *
-	 * @param arg1 ˆø”1
-	 * @return ÀsŒ‹‰Ê
+	 * @param arg1 å¼•æ•°1
+	 * @return å®Ÿè¡Œçµæœ
 	 */
 	default Either<Exception, R> run(A1 arg1) {
 		return inject(arg1).run();

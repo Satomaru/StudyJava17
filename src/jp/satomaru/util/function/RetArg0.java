@@ -3,26 +3,26 @@ package jp.satomaru.util.function;
 import jp.satomaru.util.Either;
 
 /**
- * ˆø”‚È‚µ–ß‚è’l‚ ‚è‚ÌA—áŠO‚ğƒXƒ[‚·‚éŠÖ”‚Å‚·B
+ * å¼•æ•°ãªã—æˆ»ã‚Šå€¤ã‚ã‚Šã®ã€ä¾‹å¤–ã‚’ã‚¹ãƒ­ãƒ¼ã™ã‚‹é–¢æ•°ã§ã™ã€‚
  *
  * @author Satomaru
- * @param <R> –ß‚è’l
+ * @param <R> æˆ»ã‚Šå€¤
  */
 @FunctionalInterface
 public interface RetArg0<R> {
 
 	/**
-	 * Às‚µ‚Ü‚·B
+	 * å®Ÿè¡Œã—ã¾ã™ã€‚
 	 *
-	 * @return ÀsŒ‹‰Ê
-	 * @throws Exception ˆÙí‚ª”­¶‚µ‚½ê‡
+	 * @return å®Ÿè¡Œçµæœ
+	 * @throws Exception ç•°å¸¸ãŒç™ºç”Ÿã—ãŸå ´åˆ
 	 */
 	R execute() throws Exception;
 
 	/**
-	 * Às‚µ‚Ü‚·B
+	 * å®Ÿè¡Œã—ã¾ã™ã€‚
 	 *
-	 * @return ÀsŒ‹‰Ê
+	 * @return å®Ÿè¡Œçµæœ
 	 */
 	default Either<Exception, R> run() {
 		try {

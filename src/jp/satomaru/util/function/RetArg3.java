@@ -3,45 +3,45 @@ package jp.satomaru.util.function;
 import jp.satomaru.util.Either;
 
 /**
- * ˆø”‚İ‚Á‚Â–ß‚è’l‚ ‚è‚ÌA—áŠO‚ğƒXƒ[‚·‚éŠÖ”‚Å‚·B
+ * å¼•æ•°ã¿ã£ã¤æˆ»ã‚Šå€¤ã‚ã‚Šã®ã€ä¾‹å¤–ã‚’ã‚¹ãƒ­ãƒ¼ã™ã‚‹é–¢æ•°ã§ã™ã€‚
  *
  * @author Satomaru
- * @param <A1> ˆø”1
- * @param <A2> ˆø”2
- * @param <A3> ˆø”3
- * @param <R>  –ß‚è’l
+ * @param <A1> å¼•æ•°1
+ * @param <A2> å¼•æ•°2
+ * @param <A3> å¼•æ•°3
+ * @param <R>  æˆ»ã‚Šå€¤
  */
 @FunctionalInterface
 public interface RetArg3<A1, A2, A3, R> {
 
 	/**
-	 * Às‚µ‚Ü‚·B
+	 * å®Ÿè¡Œã—ã¾ã™ã€‚
 	 *
-	 * @param arg1 ˆø”1
-	 * @param arg2 ˆø”2
-	 * @param arg3 ˆø”3
-	 * @return ÀsŒ‹‰Ê
-	 * @throws Exception ˆÙí‚ª”­¶‚µ‚½ê‡
+	 * @param arg1 å¼•æ•°1
+	 * @param arg2 å¼•æ•°2
+	 * @param arg3 å¼•æ•°3
+	 * @return å®Ÿè¡Œçµæœ
+	 * @throws Exception ç•°å¸¸ãŒç™ºç”Ÿã—ãŸå ´åˆ
 	 */
 	R execute(A1 arg1, A2 arg2, A3 arg3) throws Exception;
 
 	/**
-	 * ˆø”1‚ğ’“ü‚µ‚Ü‚·B
+	 * å¼•æ•°1ã‚’æ³¨å…¥ã—ã¾ã™ã€‚
 	 *
-	 * @param arg1 ˆø”1
-	 * @return ’“üŒã‚ÌŠÖ”
+	 * @param arg1 å¼•æ•°1
+	 * @return æ³¨å…¥å¾Œã®é–¢æ•°
 	 */
 	default RetArg2<A2, A3, R> inject(A1 arg1) {
 		return (arg2, arg3) -> execute(arg1, arg2, arg3);
 	}
 
 	/**
-	 * Às‚µ‚Ü‚·B
+	 * å®Ÿè¡Œã—ã¾ã™ã€‚
 	 *
-	 * @param arg1 ˆø”1
-	 * @param arg2 ˆø”2
-	 * @param arg3 ˆø”3
-	 * @return ÀsŒ‹‰Ê
+	 * @param arg1 å¼•æ•°1
+	 * @param arg2 å¼•æ•°2
+	 * @param arg3 å¼•æ•°3
+	 * @return å®Ÿè¡Œçµæœ
 	 */
 	default Either<Exception, R> run(A1 arg1, A2 arg2, A3 arg3) {
 		return inject(arg1).inject(arg2).inject(arg3).run();

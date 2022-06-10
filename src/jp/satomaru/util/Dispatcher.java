@@ -7,26 +7,26 @@ import jp.satomaru.util.function.RetArg2;
 import jp.satomaru.util.function.RetArg3;
 
 /**
- * w’è‚³‚ê‚½ƒRƒ}ƒ“ƒh‚É‘Î‰‚·‚éŠÖ”‚ğ‘I‘ğ‚·‚éAƒfƒBƒXƒpƒbƒ`ƒƒ[‚ğì¬‚µ‚Ü‚·B
+ * æŒ‡å®šã•ã‚ŒãŸã‚³ãƒãƒ³ãƒ‰ã«å¯¾å¿œã™ã‚‹é–¢æ•°ã‚’é¸æŠã™ã‚‹ã€ãƒ‡ã‚£ã‚¹ãƒ‘ãƒƒãƒãƒ£ãƒ¼ã‚’ä½œæˆã—ã¾ã™ã€‚
  *
  * @author Satomaru
- * @param <M> Às‚·‚éŠÖ”‚ğ‚ÂƒIƒuƒWƒFƒNƒg
- * @param <A> ŠÖ”‚Ìˆø”
- * @param <C> ƒRƒ}ƒ“ƒh
- * @param <R> Œ‹‰Ê
+ * @param <M> å®Ÿè¡Œã™ã‚‹é–¢æ•°ã‚’æŒã¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+ * @param <A> é–¢æ•°ã®å¼•æ•°
+ * @param <C> ã‚³ãƒãƒ³ãƒ‰
+ * @param <R> çµæœ
  */
 public final class Dispatcher<M, A, C, R> {
 
 	/**
-	 * ƒRƒ}ƒ“ƒh‚ÆA‚»‚ê‚É‘Î‰‚·‚éŠÖ”‚ğw’è‚µ‚ÄAƒfƒBƒXƒpƒbƒ`ƒƒ[‚Ìì¬‚ğŠJn‚µ‚Ü‚·B
+	 * ã‚³ãƒãƒ³ãƒ‰ã¨ã€ãã‚Œã«å¯¾å¿œã™ã‚‹é–¢æ•°ã‚’æŒ‡å®šã—ã¦ã€ãƒ‡ã‚£ã‚¹ãƒ‘ãƒƒãƒãƒ£ãƒ¼ã®ä½œæˆã‚’é–‹å§‹ã—ã¾ã™ã€‚
 	 *
-	 * @param <M>       Às‚·‚éŠÖ”‚ğ‚ÂƒIƒuƒWƒFƒNƒg
-	 * @param <A>       ŠÖ”‚Ìˆø”
-	 * @param <C>       ƒRƒ}ƒ“ƒh
-	 * @param <R>       Œ‹‰Ê
-	 * @param command   ƒRƒ}ƒ“ƒh
-	 * @param processor Às‚·‚éŠÖ”
-	 * @return ƒfƒBƒXƒpƒbƒ`ƒƒ[‚ğì¬‚·‚éƒIƒuƒWƒFƒNƒg
+	 * @param <M>       å®Ÿè¡Œã™ã‚‹é–¢æ•°ã‚’æŒã¤ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+	 * @param <A>       é–¢æ•°ã®å¼•æ•°
+	 * @param <C>       ã‚³ãƒãƒ³ãƒ‰
+	 * @param <R>       çµæœ
+	 * @param command   ã‚³ãƒãƒ³ãƒ‰
+	 * @param processor å®Ÿè¡Œã™ã‚‹é–¢æ•°
+	 * @return ãƒ‡ã‚£ã‚¹ãƒ‘ãƒƒãƒãƒ£ãƒ¼ã‚’ä½œæˆã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
 	 */
 	public static final <M, A, C, R> Dispatcher<M, A, C, R> begin(C command, RetArg2<M, A, R> processor) {
 		var dispatcher = new Dispatcher<M, A, C, R>();
@@ -34,18 +34,18 @@ public final class Dispatcher<M, A, C, R> {
 		return dispatcher;
 	}
 
-	/** ŠÖ”ƒ}ƒbƒvB */
+	/** é–¢æ•°ãƒãƒƒãƒ—ã€‚ */
 	private final HashMap<C, RetArg2<M, A, R>> processors = new HashMap<>();
 
 	private Dispatcher() {
 	}
 
 	/**
-	 * ƒRƒ}ƒ“ƒh‚ÆA‚»‚ê‚É‘Î‰‚·‚éŠÖ”‚ğ’Ç‰Á‚µ‚Ü‚·B
+	 * ã‚³ãƒãƒ³ãƒ‰ã¨ã€ãã‚Œã«å¯¾å¿œã™ã‚‹é–¢æ•°ã‚’è¿½åŠ ã—ã¾ã™ã€‚
 	 *
-	 * @param command   ƒRƒ}ƒ“ƒh
-	 * @param processor Às‚·‚éŠÖ”
-	 * @return ‚±‚ÌƒIƒuƒWƒFƒNƒg©g
+	 * @param command   ã‚³ãƒãƒ³ãƒ‰
+	 * @param processor å®Ÿè¡Œã™ã‚‹é–¢æ•°
+	 * @return ã“ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè‡ªèº«
 	 */
 	public Dispatcher<M, A, C, R> append(C command, RetArg2<M, A, R> processor) {
 		processors.put(command, processor);
@@ -53,9 +53,9 @@ public final class Dispatcher<M, A, C, R> {
 	}
 
 	/**
-	 * ƒfƒBƒXƒpƒbƒ`ƒƒ[‚Ìì¬‚ğI—¹‚µ‚Ü‚·B
+	 * ãƒ‡ã‚£ã‚¹ãƒ‘ãƒƒãƒãƒ£ãƒ¼ã®ä½œæˆã‚’çµ‚äº†ã—ã¾ã™ã€‚
 	 *
-	 * @return ƒfƒBƒXƒpƒbƒ`ƒƒ[
+	 * @return ãƒ‡ã‚£ã‚¹ãƒ‘ãƒƒãƒãƒ£ãƒ¼
 	 */
 	public RetArg3<M, A, C, R> end() {
 		Map<C, RetArg2<M, A, R>> fixed = Map.copyOf(processors);
