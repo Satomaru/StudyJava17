@@ -4,6 +4,11 @@ import java.util.Objects;
 
 import jp.satomaru.util.container.element.parser.ElementParser;
 
+/**
+ * 倍精度浮動小数点数を保持するエレメントです。
+ *
+ * @author Satomaru
+ */
 public record DoubleElement(String id, Double value) implements Element<Double> {
 
 	public DoubleElement {

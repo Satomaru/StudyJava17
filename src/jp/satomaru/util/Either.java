@@ -137,12 +137,7 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	}
 
 	/**
-	 * 保持している値を取得します。
-	 *
-	 * @return 保持している値
-	 * @see #optional()
-	 * @see #optionalLeft()
-	 * @see #optionalRight()
+	 * 保持している値。
 	 */
 	Object value();
 
@@ -150,7 +145,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 * 左の型を保持していることを判定します。
 	 *
 	 * @return 左の型を保持している場合はtrue
-	 * @see #isRight()
 	 */
 	boolean isLeft();
 
@@ -158,9 +152,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 * 保持している値を取得します。
 	 *
 	 * @return 保持している値
-	 * @see #value()
-	 * @see #optionalLeft()
-	 * @see #optionalRight()
 	 */
 	Optional<?> optional();
 
@@ -168,9 +159,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 * 左の値を保持している場合、値を取得します。
 	 *
 	 * @return 保持している値
-	 * @see #value()
-	 * @see #optional()
-	 * @see #optionalRight()
 	 */
 	Optional<L> optionalLeft();
 
@@ -178,9 +166,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 * 右の値を保持している場合、値を取得します。
 	 *
 	 * @return 保持している値
-	 * @see #value()
-	 * @see #optional()
-	 * @see #optionalLeft()
 	 */
 	Optional<R> optionalRight();
 
@@ -191,9 +176,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 * @param generator 左の型から例外を生成する関数
 	 * @return 右の値
 	 * @throws E 左の値を保持していた場合
-	 * @see #orElseThrowRuntime(Function, Function)
-	 * @see #orElseIllegalArgument()
-	 * @see #orElseIllegalState()
 	 */
 	<E extends Exception> R orElseThrow(Function<L, E> generator) throws E;
 
@@ -204,10 +186,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 * @param whenLeft  左の型を保持している場合に使用する関数
 	 * @param whenRight 右の型を保持している場合に使用する関数
 	 * @return 変換後の値
-	 * @see #mapLeft(Function)
-	 * @see #mapRight(Function)
-	 * @see #mapToString()
-	 * @see #format(String)
 	 */
 	<T> Optional<T> map(Function<? super L, T> whenLeft, Function<? super R, T> whenRight);
 
@@ -217,8 +195,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 * @param <L2>   新しい左の値
 	 * @param mapper 変換する関数
 	 * @return 変換後のオブジェクト
-	 * @see #map(Function, Function)
-	 * @see #mapRight(Function)
 	 */
 	<L2> Either<L2, R> mapLeft(Function<L, L2> mapper);
 
@@ -228,8 +204,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 * @param <R2>   新しい右の値
 	 * @param mapper 変換する関数
 	 * @return 変換後のオブジェクト
-	 * @see #map(Function, Function)
-	 * @see #mapLeft(Function)
 	 */
 	<R2> Either<L, R2> mapRight(Function<R, R2> mapper);
 
@@ -238,7 +212,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 *
 	 * @param action 実行する関数
 	 * @return このオブジェクト自身
-	 * @see #ifPresentRight(Consumer)
 	 */
 	Either<L, R> ifPresentLeft(Consumer<? super L> action);
 
@@ -247,7 +220,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 *
 	 * @param action 実行する関数
 	 * @return このオブジェクト自身
-	 * @see #ifPresentLeft(Consumer)
 	 */
 	Either<L, R> ifPresentRight(Consumer<? super R> action);
 
@@ -255,7 +227,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 * 右の型を保持していることを判定します。
 	 *
 	 * @return 右の型を保持している場合はtrue
-	 * @see #isLeft()
 	 */
 	default boolean isRight() {
 		return !isLeft();
@@ -268,9 +239,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 * @param exceptionWrapper 左の型が例外だった場合に実行時例外を作成する関数
 	 * @param stringWrapper    左の型が例外ではなかった場合に実行時例外を作成する関数
 	 * @return 右の値
-	 * @see #orElseThrow(Function)
-	 * @see #orElseIllegalArgument()
-	 * @see #orElseIllegalState()
 	 */
 	default <E extends RuntimeException> R orElseThrowRuntime(
 		Function<Exception, E> exceptionWrapper,
@@ -297,9 +265,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 * 保持している値が、右の型の場合は返却し、左の型の場合は不正引数例外をスローします。
 	 *
 	 * @return 右の値
-	 * @see #orElseThrow(Function)
-	 * @see #orElseThrowRuntime(Function, Function)
-	 * @see #orElseIllegalState()
 	 */
 	default R orElseIllegalArgument() {
 		return orElseThrowRuntime(
@@ -311,9 +276,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 * 保持している値が、右の型の場合は返却し、左の型の場合は不正状態例外をスローします。
 	 *
 	 * @return 右の値
-	 * @see #orElseThrow(Function)
-	 * @see #orElseThrowRuntime(Function, Function)
-	 * @see #orElseIllegalArgument()
 	 */
 	default R orElseIllegalState() {
 		return orElseThrowRuntime(
@@ -325,8 +287,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 * 保持している値を文字列に変換します。
 	 *
 	 * @return 文字列
-	 * @see #map(Function, Function)
-	 * @see #format(String)
 	 */
 	default Optional<String> mapToString() {
 		return optional().map(Object::toString);
@@ -337,8 +297,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 *
 	 * @param format フォーマット ({@link java.util.Formatter}と同じ)
 	 * @return 文字列
-	 * @see #map(Function, Function)
-	 * @see #mapToString()
 	 */
 	default Optional<String> format(String format) {
 		return optional().map(value -> String.format(format, value));

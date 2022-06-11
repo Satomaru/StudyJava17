@@ -12,40 +12,110 @@ import jp.satomaru.util.container.element.LongElement;
 import jp.satomaru.util.container.element.StringElement;
 import jp.satomaru.util.function.RetArg1;
 
+/**
+ * エレメントの値を変換して、同じ識別子で新しいエレメントを生成します。
+ *
+ * @author Satomaru
+ *
+ * @param <V> 新しい値
+ * @param <E> 新しいエレメント
+ */
 public sealed abstract class ElementParser<V, E extends Element<V>> permits ToBoolean, ToDouble, ToInstant, ToInteger, ToLocalDateTime, ToLong, ToString {
 
+	/** ブーリアンに変換するエレメントパーサー。 */
 	public static final ToBoolean BOOLEAN = new ToBoolean();
+
+	/** 倍精度浮動小数点数に変換するエレメントパーサー。 */
 	public static final ToDouble DOUBLE = new ToDouble();
+
+	/** インスタントに変換するエレメントパーサー。 */
 	public static final ToInstant INSTANT = new ToInstant();
+
+	/** 整数に変換するエレメントパーサー。 */
 	public static final ToInteger INTEGER = new ToInteger();
+
+	/** ローカル日時に変換するエレメントパーサー。 */
 	public static final ToLocalDateTime LOCALDATETIME = new ToLocalDateTime();
+
+	/** 長整数に変換するエレメントパーサー。 */
 	public static final ToLong LONG = new ToLong();
+
+	/** 文字列に変換するエレメントパーサー。 */
 	public static final ToString STRING = new ToString();
 
+	/**
+	 * ブーリアンの値を変換します。
+	 *
+	 * @param element ブーリアンのエレメント
+	 * @return 変換後のエレメント
+	 * @throws ElementException 変換に失敗した場合
+	 */
 	public E parse(BooleanElement element) throws ElementException {
 		throw new ElementException(element, typeWhenParseFailure());
 	}
 
+	/**
+	 * 倍精度浮動小数点数の値を変換します。
+	 *
+	 * @param element ブーリアンのエレメント
+	 * @return 変換後のエレメント
+	 * @throws ElementException 変換に失敗した場合
+	 */
 	public E parse(DoubleElement element) throws ElementException {
 		throw new ElementException(element, typeWhenParseFailure());
 	}
 
+	/**
+	 * インスタントの値を変換します。
+	 *
+	 * @param element ブーリアンのエレメント
+	 * @return 変換後のエレメント
+	 * @throws ElementException 変換に失敗した場合
+	 */
 	public E parse(InstantElement element) throws ElementException {
 		throw new ElementException(element, typeWhenParseFailure());
 	}
 
+	/**
+	 * 整数の値を変換します。
+	 *
+	 * @param element ブーリアンのエレメント
+	 * @return 変換後のエレメント
+	 * @throws ElementException 変換に失敗した場合
+	 */
 	public E parse(IntegerElement element) throws ElementException {
 		throw new ElementException(element, typeWhenParseFailure());
 	}
 
+	/**
+	 * ローカル日時の値を変換します。
+	 *
+	 * @param element ブーリアンのエレメント
+	 * @return 変換後のエレメント
+	 * @throws ElementException 変換に失敗した場合
+	 */
 	public E parse(LocalDateTimeElement element) throws ElementException {
 		throw new ElementException(element, typeWhenParseFailure());
 	}
 
+	/**
+	 * 長整数の値を変換します。
+	 *
+	 * @param element ブーリアンのエレメント
+	 * @return 変換後のエレメント
+	 * @throws ElementException 変換に失敗した場合
+	 */
 	public E parse(LongElement element) throws ElementException {
 		throw new ElementException(element, typeWhenParseFailure());
 	}
 
+	/**
+	 * 文字列の値を変換します。
+	 *
+	 * @param element ブーリアンのエレメント
+	 * @return 変換後のエレメント
+	 * @throws ElementException 変換に失敗した場合
+	 */
 	public E parse(StringElement element) throws ElementException {
 		throw new ElementException(element, typeWhenParseFailure());
 	}

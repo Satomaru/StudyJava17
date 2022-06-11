@@ -4,6 +4,11 @@ import java.util.Objects;
 
 import jp.satomaru.util.container.element.parser.ElementParser;
 
+/**
+ * ブーリアンを保持するエレメントです。
+ *
+ * @author Satomaru
+ */
 public record BooleanElement(String id, Boolean value) implements Element<Boolean> {
 
 	public BooleanElement {

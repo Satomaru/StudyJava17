@@ -4,6 +4,11 @@ import java.util.Objects;
 
 import jp.satomaru.util.container.element.parser.ElementParser;
 
+/**
+ * 整数を保持するエレメントです。
+ *
+ * @author Satomaru
+ */
 public record IntegerElement(String id, Integer value) implements Element<Integer> {
 
 	public IntegerElement {
