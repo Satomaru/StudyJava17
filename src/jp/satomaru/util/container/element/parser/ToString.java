@@ -54,7 +54,7 @@ final class ToString extends ElementParser<String, StringElement> {
 
 	@Override
 	protected StringElement set(Element<?> element, String newValue) {
-		return Element.of(element.id(), newValue);
+		return new StringElement(element.id(), newValue);
 	}
 
 	@Override

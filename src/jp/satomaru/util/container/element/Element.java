@@ -16,17 +16,16 @@ import jp.satomaru.util.container.element.parser.ElementParser;
  * @param <V> 値
  */
 public sealed interface Element<V> extends
-	IdentifiableValue<String, V>permits BooleanElement, DoubleElement, InstantElement, IntegerElement, LocalDateTimeElement, LongElement, StringElement {
+	IdentifiableValue<String, V>permits BooleanElement, DoubleElement, EmptyElement, InstantElement, IntegerElement, LocalDateTimeElement, LongElement, StringElement {
 
 	/**
-	 * エレメントを生成します。
+	 * 値のないエレメントを生成します。
 	 *
-	 * @param id    識別子
-	 * @param value 値
+	 * @param id 識別子
 	 * @return エレメント
 	 */
-	public static BooleanElement of(String id, Boolean value) {
-		return new BooleanElement(id, value);
+	public static Element<?> empty(String id) {
+		return new EmptyElement(id);
 	}
 
 	/**
@@ -36,8 +35,8 @@ public sealed interface Element<V> extends
 	 * @param value 値
 	 * @return エレメント
 	 */
-	public static DoubleElement of(String id, Double value) {
-		return new DoubleElement(id, value);
+	public static Element<?> of(String id, Boolean value) {
+		return (value == null) ? empty(id) : new BooleanElement(id, value);
 	}
 
 	/**
@@ -47,8 +46,8 @@ public sealed interface Element<V> extends
 	 * @param value 値
 	 * @return エレメント
 	 */
-	public static InstantElement of(String id, Instant value) {
-		return new InstantElement(id, value);
+	public static Element<?> of(String id, Double value) {
+		return (value == null) ? empty(id) : new DoubleElement(id, value);
 	}
 
 	/**
@@ -58,8 +57,8 @@ public sealed interface Element<V> extends
 	 * @param value 値
 	 * @return エレメント
 	 */
-	public static IntegerElement of(String id, Integer value) {
-		return new IntegerElement(id, value);
+	public static Element<?> of(String id, Instant value) {
+		return (value == null) ? empty(id) : new InstantElement(id, value);
 	}
 
 	/**
@@ -69,8 +68,8 @@ public sealed interface Element<V> extends
 	 * @param value 値
 	 * @return エレメント
 	 */
-	public static LocalDateTimeElement of(String id, LocalDateTime value) {
-		return new LocalDateTimeElement(id, value);
+	public static Element<?> of(String id, Integer value) {
+		return (value == null) ? empty(id) : new IntegerElement(id, value);
 	}
 
 	/**
@@ -80,8 +79,8 @@ public sealed interface Element<V> extends
 	 * @param value 値
 	 * @return エレメント
 	 */
-	public static LongElement of(String id, Long value) {
-		return new LongElement(id, value);
+	public static Element<?> of(String id, LocalDateTime value) {
+		return (value == null) ? empty(id) : new LocalDateTimeElement(id, value);
 	}
 
 	/**
@@ -91,8 +90,19 @@ public sealed interface Element<V> extends
 	 * @param value 値
 	 * @return エレメント
 	 */
-	public static StringElement of(String id, String value) {
-		return new StringElement(id, value);
+	public static Element<?> of(String id, Long value) {
+		return (value == null) ? empty(id) : new LongElement(id, value);
+	}
+
+	/**
+	 * エレメントを生成します。
+	 *
+	 * @param id    識別子
+	 * @param value 値
+	 * @return エレメント
+	 */
+	public static Element<?> of(String id, String value) {
+		return (value == null) ? empty(id) : new StringElement(id, value);
 	}
 
 	@Override
@@ -109,7 +119,18 @@ public sealed interface Element<V> extends
 	 * @return 新しいエレメント
 	 * @throws ElementException 値の変換に失敗した場合
 	 */
-	<E extends Element<?>> E accept(ElementParser<?, E> parser) throws ElementException;
+	Element<?> accept(ElementParser<?, ?> parser) throws ElementException;
+
+	/**
+	 * エレメントパーサーで値を変換して返却します。
+	 *
+	 * @param <P>    変換後の値
+	 * @param <E>    変換後のエレメント
+	 * @param parser エレメントパーサー
+	 * @return 変換後の値
+	 * @throws ElementException 値の変換に失敗した場合
+	 */
+	<P, E extends Element<P>> P parse(ElementParser<P, E> parser) throws ElementException;
 
 	/**
 	 * 値を取得します。
@@ -130,12 +151,15 @@ public sealed interface Element<V> extends
 	}
 
 	/**
-	 * 値を取得しますが、存在しない場合は例外をスローします。
+	 * エレメントパーサーで値を変換して返却しますが、値が存在しない場合は例外をスローします。
 	 *
-	 * @return 値
-	 * @throws ElementException 値が存在しない場合
+	 * @param <P>    変換後の値
+	 * @param <E>    変換後のエレメント
+	 * @param parser エレメントパーサー
+	 * @return 変換後の値
+	 * @throws ElementException 値が存在しない、または値の変換に失敗した場合
 	 */
-	default V orElseThrow() throws ElementException {
-		return optional().orElseThrow(() -> new ElementException(this, Type.EMPTY));
+	default <P, E extends Element<P>> P parseOrThrow(ElementParser<P, E> parser) throws ElementException {
+		return Optional.ofNullable(parse(parser)).orElseThrow(() -> new ElementException(this, Type.EMPTY));
 	}
 }

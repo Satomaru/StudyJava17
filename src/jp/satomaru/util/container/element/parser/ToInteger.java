@@ -38,7 +38,7 @@ final class ToInteger extends ElementParser<Integer, IntegerElement> {
 
 	@Override
 	protected IntegerElement set(Element<?> element, Integer newValue) {
-		return Element.of(element.id(), newValue);
+		return new IntegerElement(element.id(), newValue);
 	}
 
 	@Override

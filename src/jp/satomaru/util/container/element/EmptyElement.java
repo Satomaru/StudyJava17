@@ -5,24 +5,28 @@ import java.util.Objects;
 import jp.satomaru.util.container.element.parser.ElementParser;
 
 /**
- * ブーリアンを保持するエレメントです。
+ * NULLを保持するエレメントです。
  *
  * @author Satomaru
  */
-public record BooleanElement(String id, Boolean value) implements Element<Boolean> {
+public record EmptyElement(String id) implements Element<Object> {
 
-	public BooleanElement {
+	public EmptyElement {
 		Objects.requireNonNull(id, "id");
-		Objects.requireNonNull(value, "value");
+	}
+
+	@Override
+	public Object value() {
+		return null;
 	}
 
 	@Override
 	public Element<?> accept(ElementParser<?, ?> parser) throws ElementException {
-		return parser.parse(this);
+		return this;
 	}
 
 	@Override
 	public <P, E extends Element<P>> P parse(ElementParser<P, E> parser) throws ElementException {
-		return parser.parse(this).value();
+		return null;
 	}
 }

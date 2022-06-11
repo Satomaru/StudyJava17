@@ -52,7 +52,7 @@ final class ToLong extends ElementParser<Long, LongElement> {
 
 	@Override
 	protected LongElement set(Element<?> element, Long newValue) {
-		return Element.of(element.id(), newValue);
+		return new LongElement(element.id(), newValue);
 	}
 
 	@Override

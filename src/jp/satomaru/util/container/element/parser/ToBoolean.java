@@ -86,7 +86,7 @@ final class ToBoolean extends ElementParser<Boolean, BooleanElement> {
 
 	@Override
 	protected BooleanElement set(Element<?> element, Boolean newValue) {
-		return Element.of(element.id(), newValue);
+		return new BooleanElement(element.id(), newValue);
 	}
 
 	@Override
