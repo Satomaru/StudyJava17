@@ -122,10 +122,6 @@ public sealed abstract class ElementParser<V, E extends Element<V>> permits ToBo
 
 	protected final <F> E parse(Element<F> element, RetArg1<F, V> parser) throws ElementException {
 		try {
-			if (element.isEmpty()) {
-				return set(element, null);
-			}
-
 			return set(element, parser.execute(element.value()));
 		} catch (ElementException e) {
 			throw e;

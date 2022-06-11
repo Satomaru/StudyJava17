@@ -35,7 +35,7 @@ final class ToInstant extends ElementParser<Instant, InstantElement> {
 
 	@Override
 	protected InstantElement set(Element<?> element, Instant newValue) {
-		return Element.of(element.id(), newValue);
+		return new InstantElement(element.id(), newValue);
 	}
 
 	@Override

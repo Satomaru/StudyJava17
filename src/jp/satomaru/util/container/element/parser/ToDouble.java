@@ -38,7 +38,7 @@ final class ToDouble extends ElementParser<Double, DoubleElement> {
 
 	@Override
 	protected DoubleElement set(Element<?> element, Double newValue) {
-		return Element.of(element.id(), newValue);
+		return new DoubleElement(element.id(), newValue);
 	}
 
 	@Override

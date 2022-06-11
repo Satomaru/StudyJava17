@@ -14,10 +14,16 @@ public record InstantElement(String id, Instant value) implements Element<Instan
 
 	public InstantElement {
 		Objects.requireNonNull(id, "id");
+		Objects.requireNonNull(value, "value");
 	}
 
 	@Override
-	public <E extends Element<?>> E accept(ElementParser<?, E> parser) throws ElementException {
+	public Element<?> accept(ElementParser<?, ?> parser) throws ElementException {
 		return parser.parse(this);
+	}
+
+	@Override
+	public <P, E extends Element<P>> P parse(ElementParser<P, E> parser) throws ElementException {
+		return parser.parse(this).value();
 	}
 }

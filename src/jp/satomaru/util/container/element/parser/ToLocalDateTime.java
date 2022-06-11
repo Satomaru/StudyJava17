@@ -58,7 +58,7 @@ final class ToLocalDateTime extends ElementParser<LocalDateTime, LocalDateTimeEl
 
 	@Override
 	protected LocalDateTimeElement set(Element<?> element, LocalDateTime newValue) {
-		return Element.of(element.id(), newValue);
+		return new LocalDateTimeElement(element.id(), newValue);
 	}
 
 	@Override
