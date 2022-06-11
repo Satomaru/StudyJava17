@@ -112,6 +112,15 @@ public sealed interface Element<V> extends
 	V value();
 
 	/**
+	 * 値がないことを判定します。
+	 *
+	 * @return 値がない場合はtrue
+	 */
+	default boolean isEmpty() {
+		return value() == null;
+	}
+
+	/**
 	 * エレメントパーサーで値を変換し、同じ識別子で新しいエレメントを生成します。
 	 *
 	 * @param <E>    新しいエレメント
@@ -131,24 +140,6 @@ public sealed interface Element<V> extends
 	 * @throws ElementException 値の変換に失敗した場合
 	 */
 	<P, E extends Element<P>> P parse(ElementParser<P, E> parser) throws ElementException;
-
-	/**
-	 * 値を取得します。
-	 *
-	 * @return 値
-	 */
-	default Optional<V> optional() {
-		return Optional.ofNullable(value());
-	}
-
-	/**
-	 * 値が存在しないことを判定します。
-	 *
-	 * @return 値が存在しない場合はtrue
-	 */
-	default boolean isEmpty() {
-		return optional().isEmpty();
-	}
 
 	/**
 	 * エレメントパーサーで値を変換して返却しますが、値が存在しない場合は例外をスローします。
