@@ -18,10 +18,10 @@ public class ElementSample {
 
 	private static String test(String id, String string) throws Exception {
 		var element1 = Element.of(id, string);
-		var element2 = element1.accept(ElementParser.LOCALDATETIME);
-		var element3 = element2.accept(ElementParser.LONG);
-		var element4 = element3.accept(ElementParser.INSTANT);
-		var element5 = element4.accept(ElementParser.LOCALDATETIME);
+		var element2 = element1.map(ElementParser.LOCALDATETIME);
+		var element3 = element2.map(ElementParser.LONG);
+		var element4 = element3.map(ElementParser.INSTANT);
+		var element5 = element4.map(ElementParser.LOCALDATETIME);
 		var result = element5.parse(ElementParser.STRING);
 
 		System.out.println(element1.description());

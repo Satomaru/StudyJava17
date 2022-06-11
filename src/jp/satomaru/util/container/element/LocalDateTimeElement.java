@@ -18,7 +18,7 @@ public record LocalDateTimeElement(String id, LocalDateTime value) implements El
 	}
 
 	@Override
-	public Element<?> accept(ElementParser<?, ?> parser) throws ElementException {
+	public Element<?> map(ElementParser<?, ?> parser) throws ElementException {
 		return parser.parse(this);
 	}
 

@@ -17,7 +17,7 @@ public record DoubleElement(String id, Double value) implements Element<Double> 
 	}
 
 	@Override
-	public Element<?> accept(ElementParser<?, ?> parser) throws ElementException {
+	public Element<?> map(ElementParser<?, ?> parser) throws ElementException {
 		return parser.parse(this);
 	}
 

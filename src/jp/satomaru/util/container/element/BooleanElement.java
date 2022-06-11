@@ -17,7 +17,7 @@ public record BooleanElement(String id, Boolean value) implements Element<Boolea
 	}
 
 	@Override
-	public Element<?> accept(ElementParser<?, ?> parser) throws ElementException {
+	public Element<?> map(ElementParser<?, ?> parser) throws ElementException {
 		return parser.parse(this);
 	}
 

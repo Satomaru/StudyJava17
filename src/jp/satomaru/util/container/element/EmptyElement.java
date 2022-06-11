@@ -21,7 +21,7 @@ public record EmptyElement(String id) implements Element<Object> {
 	}
 
 	@Override
-	public Element<?> accept(ElementParser<?, ?> parser) throws ElementException {
+	public Element<?> map(ElementParser<?, ?> parser) throws ElementException {
 		return this;
 	}
 

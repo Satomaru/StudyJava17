@@ -18,7 +18,7 @@ public record InstantElement(String id, Instant value) implements Element<Instan
 	}
 
 	@Override
-	public Element<?> accept(ElementParser<?, ?> parser) throws ElementException {
+	public Element<?> map(ElementParser<?, ?> parser) throws ElementException {
 		return parser.parse(this);
 	}
 

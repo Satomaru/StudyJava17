@@ -17,7 +17,7 @@ public record StringElement(String id, String value) implements Element<String> 
 	}
 
 	@Override
-	public Element<?> accept(ElementParser<?, ?> parser) throws ElementException {
+	public Element<?> map(ElementParser<?, ?> parser) throws ElementException {
 		return parser.parse(this);
 	}
 

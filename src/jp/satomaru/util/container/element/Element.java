@@ -128,7 +128,7 @@ public sealed interface Element<V> extends
 	 * @return 新しいエレメント
 	 * @throws ElementException 値の変換に失敗した場合
 	 */
-	Element<?> accept(ElementParser<?, ?> parser) throws ElementException;
+	Element<?> map(ElementParser<?, ?> parser) throws ElementException;
 
 	/**
 	 * エレメントパーサーで値を変換して返却します。

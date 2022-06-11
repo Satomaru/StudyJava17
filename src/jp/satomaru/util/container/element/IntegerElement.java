@@ -17,7 +17,7 @@ public record IntegerElement(String id, Integer value) implements Element<Intege
 	}
 
 	@Override
-	public Element<?> accept(ElementParser<?, ?> parser) throws ElementException {
+	public Element<?> map(ElementParser<?, ?> parser) throws ElementException {
 		return parser.parse(this);
 	}
 
