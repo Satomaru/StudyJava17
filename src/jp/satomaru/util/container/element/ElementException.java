@@ -45,8 +45,17 @@ public class ElementException extends Exception {
 			this.message = message;
 		}
 
+		/**
+		 * メッセージを取得します。
+		 *
+		 * @param element 例外が発生したエレメント
+		 * @return メッセージ
+		 */
 		public String getMessage(Element<?> element) {
-			return String.format(message, element.id(), element.value());
+			return String.format(message,
+				element.id(),
+				element.value(),
+				element.getValueTypeName());
 		}
 	}
 

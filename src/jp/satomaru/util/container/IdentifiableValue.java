@@ -16,12 +16,24 @@ public interface IdentifiableValue<I, V> extends Identifiable<I> {
 	V value();
 
 	/**
+	 * 値の型名を取得します。
+	 *
+	 * @return 値の型名
+	 */
+	default String getValueTypeName() {
+		if (value() == null) {
+			return "?";
+		}
+
+		return value().getClass().getSimpleName();
+	}
+
+	/**
 	 * 説明文を作成します。
 	 *
 	 * @return 説明文
 	 */
-	default String description() {
-		String type = (value() == null) ? "?" : value().getClass().getSimpleName();
-		return String.format("{<%s> %s: %s}", type, id(), value());
+	default String getValueDescription() {
+		return String.format("{<%s> %s: %s}", getValueTypeName(), id(), value());
 	}
 }

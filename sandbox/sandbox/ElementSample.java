@@ -3,11 +3,6 @@ package sandbox;
 import jp.satomaru.util.container.element.Element;
 import jp.satomaru.util.container.element.parser.ElementParser;
 
-/**
- * Elementのサンプル。
- *
- * @author Satomaru
- */
 public class ElementSample {
 
 	public static void main(String[] args) throws Exception {
@@ -24,11 +19,11 @@ public class ElementSample {
 		var element5 = element4.map(ElementParser.LOCALDATETIME);
 		var result = element5.parse(ElementParser.STRING);
 
-		System.out.println(element1.description());
-		System.out.println(element2.description());
-		System.out.println(element3.description());
-		System.out.println(element4.description());
-		System.out.println(element5.description());
+		System.out.println(element1.getValueDescription());
+		System.out.println(element2.getValueDescription());
+		System.out.println(element3.getValueDescription());
+		System.out.println(element4.getValueDescription());
+		System.out.println(element5.getValueDescription());
 		return result;
 	}
 }

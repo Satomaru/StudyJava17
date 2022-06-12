@@ -19,90 +19,48 @@ public sealed interface Element<V> extends
 	IdentifiableValue<String, V>permits BooleanElement, DoubleElement, EmptyElement, InstantElement, IntegerElement, LocalDateTimeElement, LongElement, StringElement {
 
 	/**
-	 * 値のないエレメントを生成します。
-	 *
-	 * @param id 識別子
-	 * @return エレメント
-	 */
-	public static Element<?> empty(String id) {
-		return new EmptyElement(id);
-	}
-
-	/**
 	 * エレメントを生成します。
 	 *
 	 * @param id    識別子
 	 * @param value 値
 	 * @return エレメント
+	 * @throws IllegalArgumentException 値の型がサポートされていない場合
 	 */
-	public static Element<?> of(String id, Boolean value) {
-		return (value == null) ? empty(id) : new BooleanElement(id, value);
-	}
+	public static Element<?> of(String id, Object value) {
+		if (value == null) {
+			return new EmptyElement(id);
+		}
 
-	/**
-	 * エレメントを生成します。
-	 *
-	 * @param id    識別子
-	 * @param value 値
-	 * @return エレメント
-	 */
-	public static Element<?> of(String id, Double value) {
-		return (value == null) ? empty(id) : new DoubleElement(id, value);
-	}
+		if (value instanceof Boolean booleanValue) {
+			return new BooleanElement(id, booleanValue);
+		}
 
-	/**
-	 * エレメントを生成します。
-	 *
-	 * @param id    識別子
-	 * @param value 値
-	 * @return エレメント
-	 */
-	public static Element<?> of(String id, Instant value) {
-		return (value == null) ? empty(id) : new InstantElement(id, value);
-	}
+		if (value instanceof Double doubleValue) {
+			return new DoubleElement(id, doubleValue);
+		}
 
-	/**
-	 * エレメントを生成します。
-	 *
-	 * @param id    識別子
-	 * @param value 値
-	 * @return エレメント
-	 */
-	public static Element<?> of(String id, Integer value) {
-		return (value == null) ? empty(id) : new IntegerElement(id, value);
-	}
+		if (value instanceof Instant instant) {
+			return new InstantElement(id, instant);
+		}
 
-	/**
-	 * エレメントを生成します。
-	 *
-	 * @param id    識別子
-	 * @param value 値
-	 * @return エレメント
-	 */
-	public static Element<?> of(String id, LocalDateTime value) {
-		return (value == null) ? empty(id) : new LocalDateTimeElement(id, value);
-	}
+		if (value instanceof Integer integer) {
+			return new IntegerElement(id, integer);
+		}
 
-	/**
-	 * エレメントを生成します。
-	 *
-	 * @param id    識別子
-	 * @param value 値
-	 * @return エレメント
-	 */
-	public static Element<?> of(String id, Long value) {
-		return (value == null) ? empty(id) : new LongElement(id, value);
-	}
+		if (value instanceof LocalDateTime localDateTime) {
+			return new LocalDateTimeElement(id, localDateTime);
+		}
 
-	/**
-	 * エレメントを生成します。
-	 *
-	 * @param id    識別子
-	 * @param value 値
-	 * @return エレメント
-	 */
-	public static Element<?> of(String id, String value) {
-		return (value == null) ? empty(id) : new StringElement(id, value);
+		if (value instanceof Long longValue) {
+			return new LongElement(id, longValue);
+		}
+
+		if (value instanceof String string) {
+			return new StringElement(id, string);
+		}
+
+		String type = value.getClass().getSimpleName();
+		throw new IllegalArgumentException(String.format("unsupported type: %s", type));
 	}
 
 	@Override
