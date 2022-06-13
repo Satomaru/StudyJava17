@@ -9,35 +9,35 @@ import jp.satomaru.util.container.element.IntegerElement;
 import jp.satomaru.util.container.element.LongElement;
 import jp.satomaru.util.container.element.StringElement;
 
-final class ToDouble extends ElementParser<Double, DoubleElement> {
+final class ToDouble extends ElementParser<Double> {
 
 	@Override
-	public DoubleElement parse(BooleanElement element) throws ElementException {
-		return parse(element, value -> value ? -1.0D : 0.0D);
+	public Element<Double> parse(BooleanElement element) throws ElementException {
+		return map(element, value -> value ? -1.0D : 0.0D);
 	}
 
 	@Override
-	public DoubleElement parse(DoubleElement element) throws ElementException {
+	public Element<Double> parse(DoubleElement element) throws ElementException {
 		return element;
 	}
 
 	@Override
-	public DoubleElement parse(IntegerElement element) throws ElementException {
-		return parse(element, Number::doubleValue);
+	public Element<Double> parse(IntegerElement element) throws ElementException {
+		return map(element, Number::doubleValue);
 	}
 
 	@Override
-	public DoubleElement parse(LongElement element) throws ElementException {
-		return parse(element, Number::doubleValue);
+	public Element<Double> parse(LongElement element) throws ElementException {
+		return map(element, Number::doubleValue);
 	}
 
 	@Override
-	public DoubleElement parse(StringElement element) throws ElementException {
-		return parse(element, Double::valueOf);
+	public Element<Double> parse(StringElement element) throws ElementException {
+		return map(element, Double::valueOf);
 	}
 
 	@Override
-	protected DoubleElement set(Element<?> element, Double newValue) {
+	protected Element<Double> set(Element<?> element, Double newValue) {
 		return new DoubleElement(element.id(), newValue);
 	}
 

@@ -11,19 +11,19 @@ import jp.satomaru.util.container.element.IntegerElement;
 import jp.satomaru.util.container.element.LongElement;
 import jp.satomaru.util.container.element.StringElement;
 
-final class ToBoolean extends ElementParser<Boolean, BooleanElement> {
+final class ToBoolean extends ElementParser<Boolean> {
 
 	private static final Set<String> TRUTHY = Set.of("true", "on", "yes", "ok");
 	private static final Set<String> FALSY = Set.of("false", "off", "no", "ng");
 
 	@Override
-	public BooleanElement parse(BooleanElement element) throws ElementException {
+	public Element<Boolean> parse(BooleanElement element) throws ElementException {
 		return element;
 	}
 
 	@Override
-	public BooleanElement parse(DoubleElement element) throws ElementException {
-		return parse(element, value -> {
+	public Element<Boolean> parse(DoubleElement element) throws ElementException {
+		return map(element, value -> {
 			if (value == -1.0D) {
 				return true;
 			}
@@ -37,8 +37,8 @@ final class ToBoolean extends ElementParser<Boolean, BooleanElement> {
 	}
 
 	@Override
-	public BooleanElement parse(IntegerElement element) throws ElementException {
-		return parse(element, value -> {
+	public Element<Boolean> parse(IntegerElement element) throws ElementException {
+		return map(element, value -> {
 			if (value == -1) {
 				return true;
 			}
@@ -52,8 +52,8 @@ final class ToBoolean extends ElementParser<Boolean, BooleanElement> {
 	}
 
 	@Override
-	public BooleanElement parse(LongElement element) throws ElementException {
-		return parse(element, value -> {
+	public Element<Boolean> parse(LongElement element) throws ElementException {
+		return map(element, value -> {
 			if (value == -1L) {
 				return true;
 			}
@@ -67,8 +67,8 @@ final class ToBoolean extends ElementParser<Boolean, BooleanElement> {
 	}
 
 	@Override
-	public BooleanElement parse(StringElement element) throws ElementException {
-		return parse(element, value -> {
+	public Element<Boolean> parse(StringElement element) throws ElementException {
+		return map(element, value -> {
 			String lowerCase = value.toLowerCase();
 
 			if (TRUTHY.contains(lowerCase)) {
@@ -85,7 +85,7 @@ final class ToBoolean extends ElementParser<Boolean, BooleanElement> {
 	}
 
 	@Override
-	protected BooleanElement set(Element<?> element, Boolean newValue) {
+	protected Element<Boolean> set(Element<?> element, Boolean newValue) {
 		return new BooleanElement(element.id(), newValue);
 	}
 

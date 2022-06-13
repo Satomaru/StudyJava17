@@ -2,6 +2,7 @@ package jp.satomaru.util.container.element;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 import jp.satomaru.util.container.IdentifiableValue;
@@ -63,6 +64,27 @@ public sealed interface Element<V> extends
 		throw new IllegalArgumentException(String.format("unsupported type: %s", type));
 	}
 
+	/**
+	 * エレメントを生成します。
+	 *
+	 * @param value 識別子付き値
+	 * @return エレメント
+	 * @throws IllegalArgumentException 値の型がサポートされていない場合
+	 */
+	public static Element<?> of(IdentifiableValue<String, ?> value) {
+		return of(value.id(), value.value());
+	}
+
+	/**
+	 * エレメントを生成します。
+	 *
+	 * @param entry 識別子をキーとしたマップのエントリ
+	 * @return エレメント
+	 */
+	public static Element<?> of(Map.Entry<String, ?> entry) {
+		return of(entry.getKey(), entry.getValue());
+	}
+
 	@Override
 	String id();
 
@@ -86,7 +108,7 @@ public sealed interface Element<V> extends
 	 * @return 新しいエレメント
 	 * @throws ElementException 値の変換に失敗した場合
 	 */
-	Element<?> map(ElementParser<?, ?> parser) throws ElementException;
+	Element<?> map(ElementParser<?> parser) throws ElementException;
 
 	/**
 	 * エレメントパーサーで値を変換して返却します。
@@ -97,7 +119,7 @@ public sealed interface Element<V> extends
 	 * @return 変換後の値
 	 * @throws ElementException 値の変換に失敗した場合
 	 */
-	<P, E extends Element<P>> P parse(ElementParser<P, E> parser) throws ElementException;
+	<P> P parse(ElementParser<P> parser) throws ElementException;
 
 	/**
 	 * エレメントパーサーで値を変換して返却しますが、値が存在しない場合は例外をスローします。
@@ -108,7 +130,7 @@ public sealed interface Element<V> extends
 	 * @return 変換後の値
 	 * @throws ElementException 値が存在しない、または値の変換に失敗した場合
 	 */
-	default <P, E extends Element<P>> P parseOrThrow(ElementParser<P, E> parser) throws ElementException {
+	default <P> P parseOrThrow(ElementParser<P> parser) throws ElementException {
 		return Optional.ofNullable(parse(parser)).orElseThrow(() -> new ElementException(this, Type.EMPTY));
 	}
 }

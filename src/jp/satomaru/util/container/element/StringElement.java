@@ -17,12 +17,12 @@ public record StringElement(String id, String value) implements Element<String> 
 	}
 
 	@Override
-	public Element<?> map(ElementParser<?, ?> parser) throws ElementException {
+	public Element<?> map(ElementParser<?> parser) throws ElementException {
 		return parser.parse(this);
 	}
 
 	@Override
-	public <P, E extends Element<P>> P parse(ElementParser<P, E> parser) throws ElementException {
+	public <P> P parse(ElementParser<P> parser) throws ElementException {
 		return parser.parse(this).value();
 	}
 }

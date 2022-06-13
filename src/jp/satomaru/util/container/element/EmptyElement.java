@@ -21,12 +21,12 @@ public record EmptyElement(String id) implements Element<Object> {
 	}
 
 	@Override
-	public Element<?> map(ElementParser<?, ?> parser) throws ElementException {
+	public Element<?> map(ElementParser<?> parser) throws ElementException {
 		return this;
 	}
 
 	@Override
-	public <P, E extends Element<P>> P parse(ElementParser<P, E> parser) throws ElementException {
+	public <P> P parse(ElementParser<P> parser) throws ElementException {
 		return null;
 	}
 }

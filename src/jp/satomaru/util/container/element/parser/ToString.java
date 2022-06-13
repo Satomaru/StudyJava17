@@ -13,47 +13,47 @@ import jp.satomaru.util.container.element.LocalDateTimeElement;
 import jp.satomaru.util.container.element.LongElement;
 import jp.satomaru.util.container.element.StringElement;
 
-final class ToString extends ElementParser<String, StringElement> {
+final class ToString extends ElementParser<String> {
 
 	private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
 
 	@Override
-	public StringElement parse(BooleanElement element) throws ElementException {
-		return parse(element, Object::toString);
+	public Element<String> parse(BooleanElement element) throws ElementException {
+		return map(element, Object::toString);
 	}
 
 	@Override
-	public StringElement parse(DoubleElement element) throws ElementException {
-		return parse(element, Object::toString);
+	public Element<String> parse(DoubleElement element) throws ElementException {
+		return map(element, Object::toString);
 	}
 
 	@Override
-	public StringElement parse(InstantElement element) throws ElementException {
-		return parse(element, Object::toString);
+	public Element<String> parse(InstantElement element) throws ElementException {
+		return map(element, Object::toString);
 	}
 
 	@Override
-	public StringElement parse(IntegerElement element) throws ElementException {
-		return parse(element, Object::toString);
+	public Element<String> parse(IntegerElement element) throws ElementException {
+		return map(element, Object::toString);
 	}
 
 	@Override
-	public StringElement parse(LocalDateTimeElement element) throws ElementException {
-		return parse(element, value -> value.format(DATETIME_FORMATTER));
+	public Element<String> parse(LocalDateTimeElement element) throws ElementException {
+		return map(element, value -> value.format(DATETIME_FORMATTER));
 	}
 
 	@Override
-	public StringElement parse(LongElement element) throws ElementException {
-		return parse(element, Object::toString);
+	public Element<String> parse(LongElement element) throws ElementException {
+		return map(element, Object::toString);
 	}
 
 	@Override
-	public StringElement parse(StringElement element) throws ElementException {
+	public Element<String> parse(StringElement element) throws ElementException {
 		return element;
 	}
 
 	@Override
-	protected StringElement set(Element<?> element, String newValue) {
+	protected Element<String> set(Element<?> element, String newValue) {
 		return new StringElement(element.id(), newValue);
 	}
 

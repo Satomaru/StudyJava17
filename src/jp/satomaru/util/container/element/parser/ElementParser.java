@@ -18,9 +18,8 @@ import jp.satomaru.util.function.RetArg1;
  * @author Satomaru
  *
  * @param <V> 新しい値
- * @param <E> 新しいエレメント
  */
-public sealed abstract class ElementParser<V, E extends Element<V>> permits ToBoolean, ToDouble, ToInstant, ToInteger, ToLocalDateTime, ToLong, ToString {
+public sealed abstract class ElementParser<V> permits ToBoolean, ToDouble, ToInstant, ToInteger, ToLocalDateTime, ToLong, ToString {
 
 	/** ブーリアンに変換するエレメントパーサー。 */
 	public static final ToBoolean BOOLEAN = new ToBoolean();
@@ -50,7 +49,7 @@ public sealed abstract class ElementParser<V, E extends Element<V>> permits ToBo
 	 * @return 変換後のエレメント
 	 * @throws ElementException 変換に失敗した場合
 	 */
-	public E parse(BooleanElement element) throws ElementException {
+	public Element<V> parse(BooleanElement element) throws ElementException {
 		throw new ElementException(element, typeWhenParseFailure());
 	}
 
@@ -61,7 +60,7 @@ public sealed abstract class ElementParser<V, E extends Element<V>> permits ToBo
 	 * @return 変換後のエレメント
 	 * @throws ElementException 変換に失敗した場合
 	 */
-	public E parse(DoubleElement element) throws ElementException {
+	public Element<V> parse(DoubleElement element) throws ElementException {
 		throw new ElementException(element, typeWhenParseFailure());
 	}
 
@@ -72,7 +71,7 @@ public sealed abstract class ElementParser<V, E extends Element<V>> permits ToBo
 	 * @return 変換後のエレメント
 	 * @throws ElementException 変換に失敗した場合
 	 */
-	public E parse(InstantElement element) throws ElementException {
+	public Element<V> parse(InstantElement element) throws ElementException {
 		throw new ElementException(element, typeWhenParseFailure());
 	}
 
@@ -83,7 +82,7 @@ public sealed abstract class ElementParser<V, E extends Element<V>> permits ToBo
 	 * @return 変換後のエレメント
 	 * @throws ElementException 変換に失敗した場合
 	 */
-	public E parse(IntegerElement element) throws ElementException {
+	public Element<V> parse(IntegerElement element) throws ElementException {
 		throw new ElementException(element, typeWhenParseFailure());
 	}
 
@@ -94,7 +93,7 @@ public sealed abstract class ElementParser<V, E extends Element<V>> permits ToBo
 	 * @return 変換後のエレメント
 	 * @throws ElementException 変換に失敗した場合
 	 */
-	public E parse(LocalDateTimeElement element) throws ElementException {
+	public Element<V> parse(LocalDateTimeElement element) throws ElementException {
 		throw new ElementException(element, typeWhenParseFailure());
 	}
 
@@ -105,7 +104,7 @@ public sealed abstract class ElementParser<V, E extends Element<V>> permits ToBo
 	 * @return 変換後のエレメント
 	 * @throws ElementException 変換に失敗した場合
 	 */
-	public E parse(LongElement element) throws ElementException {
+	public Element<V> parse(LongElement element) throws ElementException {
 		throw new ElementException(element, typeWhenParseFailure());
 	}
 
@@ -116,11 +115,11 @@ public sealed abstract class ElementParser<V, E extends Element<V>> permits ToBo
 	 * @return 変換後のエレメント
 	 * @throws ElementException 変換に失敗した場合
 	 */
-	public E parse(StringElement element) throws ElementException {
+	public Element<V> parse(StringElement element) throws ElementException {
 		throw new ElementException(element, typeWhenParseFailure());
 	}
 
-	protected final <F> E parse(Element<F> element, RetArg1<F, V> parser) throws ElementException {
+	protected final <F> Element<V> map(Element<F> element, RetArg1<F, V> parser) throws ElementException {
 		try {
 			return set(element, parser.execute(element.value()));
 		} catch (ElementException e) {
@@ -130,7 +129,7 @@ public sealed abstract class ElementParser<V, E extends Element<V>> permits ToBo
 		}
 	}
 
-	protected abstract E set(Element<?> element, V newValue);
+	protected abstract Element<V> set(Element<?> element, V newValue);
 
 	protected abstract Type typeWhenParseFailure();
 }

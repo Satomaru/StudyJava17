@@ -15,30 +15,30 @@ import jp.satomaru.util.container.element.LocalDateTimeElement;
 import jp.satomaru.util.container.element.LongElement;
 import jp.satomaru.util.container.element.StringElement;
 
-final class ToLocalDateTime extends ElementParser<LocalDateTime, LocalDateTimeElement> {
+final class ToLocalDateTime extends ElementParser<LocalDateTime> {
 
 	private static final Pattern DATETIME_PATTERN = Pattern.compile(
 		"(?<year>\\d{4})[/.-](?<month>\\d{2})[/.-](?<dayOfMonth>\\d{2})"
 			+ "([T ](?<hour>\\d{2}):(?<minute>\\d{2}):(?<second>\\d{2})(\\.(?<milliOfSecond>\\d{3}))?)?");
 
 	@Override
-	public LocalDateTimeElement parse(InstantElement element) throws ElementException {
-		return parse(element, value -> value.atZone(ZoneId.systemDefault()).toLocalDateTime());
+	public Element<LocalDateTime> parse(InstantElement element) throws ElementException {
+		return map(element, value -> value.atZone(ZoneId.systemDefault()).toLocalDateTime());
 	}
 
 	@Override
-	public LocalDateTimeElement parse(LocalDateTimeElement element) throws ElementException {
+	public Element<LocalDateTime> parse(LocalDateTimeElement element) throws ElementException {
 		return element;
 	}
 
 	@Override
-	public LocalDateTimeElement parse(LongElement element) throws ElementException {
-		return parse(element, value -> Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDateTime());
+	public Element<LocalDateTime> parse(LongElement element) throws ElementException {
+		return map(element, value -> Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDateTime());
 	}
 
 	@Override
-	public LocalDateTimeElement parse(StringElement element) throws ElementException {
-		return parse(element, value -> {
+	public Element<LocalDateTime> parse(StringElement element) throws ElementException {
+		return map(element, value -> {
 			Matcher matcher = DATETIME_PATTERN.matcher(value);
 
 			if (!matcher.matches()) {
@@ -57,7 +57,7 @@ final class ToLocalDateTime extends ElementParser<LocalDateTime, LocalDateTimeEl
 	}
 
 	@Override
-	protected LocalDateTimeElement set(Element<?> element, LocalDateTime newValue) {
+	protected Element<LocalDateTime> set(Element<?> element, LocalDateTime newValue) {
 		return new LocalDateTimeElement(element.id(), newValue);
 	}
 
