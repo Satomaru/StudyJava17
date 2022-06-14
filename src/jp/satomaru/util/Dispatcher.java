@@ -3,6 +3,7 @@ package jp.satomaru.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import jp.satomaru.util.DispatcherException.Type;
 import jp.satomaru.util.function.RetArg2;
 import jp.satomaru.util.function.RetArg3;
 
@@ -62,11 +63,11 @@ public final class Dispatcher<M, A, C, R> {
 
 		return (model, argument, command) -> {
 			if (command == null) {
-				throw new NullPointerException("command");
+				throw new DispatcherException(command, Type.EMPTY_COMMAND);
 			}
 
 			if (!fixed.containsKey(command)) {
-				throw new IllegalArgumentException(String.format("command: %s", command));
+				throw new DispatcherException(command, Type.UNKNOWN_COMMAND);
 			}
 
 			return fixed.get(command).execute(model, argument);

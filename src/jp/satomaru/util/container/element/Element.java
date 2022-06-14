@@ -103,7 +103,6 @@ public sealed interface Element<V> extends
 	/**
 	 * エレメントパーサーで値を変換し、同じ識別子で新しいエレメントを生成します。
 	 *
-	 * @param <E>    新しいエレメント
 	 * @param parser エレメントパーサー
 	 * @return 新しいエレメント
 	 * @throws ElementException 値の変換に失敗した場合
@@ -114,7 +113,6 @@ public sealed interface Element<V> extends
 	 * エレメントパーサーで値を変換して返却します。
 	 *
 	 * @param <P>    変換後の値
-	 * @param <E>    変換後のエレメント
 	 * @param parser エレメントパーサー
 	 * @return 変換後の値
 	 * @throws ElementException 値の変換に失敗した場合
@@ -125,7 +123,6 @@ public sealed interface Element<V> extends
 	 * エレメントパーサーで値を変換して返却しますが、値が存在しない場合は例外をスローします。
 	 *
 	 * @param <P>    変換後の値
-	 * @param <E>    変換後のエレメント
 	 * @param parser エレメントパーサー
 	 * @return 変換後の値
 	 * @throws ElementException 値が存在しない、または値の変換に失敗した場合

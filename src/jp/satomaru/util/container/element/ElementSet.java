@@ -83,11 +83,11 @@ public final class ElementSet {
 	 * @return エレメント
 	 */
 	public Element<?> element(Object id) {
-		return elements.get(id);
+		return elements.containsKey(id) ? elements.get(id) : new EmptyElement(id);
 	}
 
 	/**
-	 * エレメントパーサーを使用して値を取得します。
+	 * エレメントパーサーで値を変換して返却します。
 	 *
 	 * @param <V>    値
 	 * @param id     識別子
@@ -100,7 +100,20 @@ public final class ElementSet {
 	}
 
 	/**
-	 * エレメントパーサーを指定して、識別子から値が取得できる関数を作成します。
+	 * エレメントパーサーで値を変換して返却しますが、値が存在しない場合は例外をスローします。
+	 *
+	 * @param <V>    値
+	 * @param id     識別子
+	 * @param parser エレメントパーサー
+	 * @return 値
+	 * @throws ElementException 値が存在しない、または値の変換に失敗した場合
+	 */
+	public <V> V parseOrThrow(Object id, ElementParser<V> parser) throws ElementException {
+		return element(id).parseOrThrow(parser);
+	}
+
+	/**
+	 * エレメントパーサーを指定して、識別子で値を取得する関数を作成します。
 	 *
 	 * @param <V>    値
 	 * @param parser エレメントパーサー
@@ -108,5 +121,16 @@ public final class ElementSet {
 	 */
 	public <V> ThrowableFunction<Object, V, ElementException> parseBy(ElementParser<V> parser) {
 		return id -> parse(id, parser);
+	}
+
+	/**
+	 * エレメントパーサーを指定して、識別子で値を取得する関数を作成します。
+	 *
+	 * @param <V>    値
+	 * @param parser エレメントパーサー
+	 * @return 作成した関数
+	 */
+	public <V> ThrowableFunction<Object, V, ElementException> parseOrThrowBy(ElementParser<V> parser) {
+		return id -> parseOrThrow(id, parser);
 	}
 }

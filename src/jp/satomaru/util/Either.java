@@ -74,6 +74,17 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 		public Either<L, R> ifPresentRight(Consumer<? super R> action) {
 			return this;
 		}
+
+		@Override
+		public <T extends L> Either<L, R> ifLeft(Class<T> expected, Consumer<? super T> action) {
+			optional().filter(expected::isInstance).map(expected::cast).ifPresent(action);
+			return this;
+		}
+
+		@Override
+		public <T extends R> Either<L, R> ifRight(Class<T> expected, Consumer<? super T> action) {
+			return this;
+		}
 	}
 
 	/**
@@ -132,6 +143,17 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 		@Override
 		public Either<L, R> ifPresentRight(Consumer<? super R> action) {
 			optional().ifPresent(action);
+			return this;
+		}
+
+		@Override
+		public <T extends L> Either<L, R> ifLeft(Class<T> expected, Consumer<? super T> action) {
+			return this;
+		}
+
+		@Override
+		public <T extends R> Either<L, R> ifRight(Class<T> expected, Consumer<? super T> action) {
+			optional().filter(expected::isInstance).map(expected::cast).ifPresent(action);
 			return this;
 		}
 	}
@@ -224,63 +246,32 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	Either<L, R> ifPresentRight(Consumer<? super R> action);
 
 	/**
+	 * 左の値を保持していて、かつ期待する型の場合、指定された関数を実行します。
+	 *
+	 * @param <T>      左の値を期待する型に変換した値
+	 * @param expected 期待する型
+	 * @param action   実行する関数
+	 * @return このオブジェクト自身
+	 */
+	<T extends L> Either<L, R> ifLeft(Class<T> expected, Consumer<? super T> action);
+
+	/**
+	 * 右の値を保持していて、かつ期待する型の場合、指定された関数を実行します。
+	 *
+	 * @param <T>      右の値を期待する型に変換した値
+	 * @param expected 期待する型
+	 * @param action   実行する関数
+	 * @return このオブジェクト自身
+	 */
+	<T extends R> Either<L, R> ifRight(Class<T> expected, Consumer<? super T> action);
+
+	/**
 	 * 右の型を保持していることを判定します。
 	 *
 	 * @return 右の型を保持している場合はtrue
 	 */
 	default boolean isRight() {
 		return !isLeft();
-	}
-
-	/**
-	 * 保持している値が、右の型の場合は返却し、左の型の場合は実行時例外をスローします。
-	 *
-	 * @param <E>              実行時例外
-	 * @param exceptionWrapper 左の型が例外だった場合に実行時例外を作成する関数
-	 * @param stringWrapper    左の型が例外ではなかった場合に実行時例外を作成する関数
-	 * @return 右の値
-	 */
-	default <E extends RuntimeException> R orElseThrowRuntime(
-		Function<Exception, E> exceptionWrapper,
-		Function<String, E> stringWrapper) {
-
-		return orElseThrow(leftValue -> {
-			if (leftValue == null) {
-				throw new NullPointerException();
-			}
-
-			if (leftValue instanceof RuntimeException runtime) {
-				throw runtime;
-			}
-
-			if (leftValue instanceof Exception exception) {
-				throw exceptionWrapper.apply(exception);
-			}
-
-			throw stringWrapper.apply(leftValue.toString());
-		});
-	}
-
-	/**
-	 * 保持している値が、右の型の場合は返却し、左の型の場合は不正引数例外をスローします。
-	 *
-	 * @return 右の値
-	 */
-	default R orElseIllegalArgument() {
-		return orElseThrowRuntime(
-			IllegalArgumentException::new,
-			IllegalArgumentException::new);
-	}
-
-	/**
-	 * 保持している値が、右の型の場合は返却し、左の型の場合は不正状態例外をスローします。
-	 *
-	 * @return 右の値
-	 */
-	default R orElseIllegalState() {
-		return orElseThrowRuntime(
-			IllegalStateException::new,
-			IllegalStateException::new);
 	}
 
 	/**

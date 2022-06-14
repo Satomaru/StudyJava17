@@ -9,14 +9,10 @@ public class ElementException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 例外の種類。
-	 *
-	 * @author Satomaru
-	 */
+	/** 例外の種類。 */
 	public enum Type {
 		/** 値が存在しない。 */
-		EMPTY("%1$s is empty"),
+		EMPTY("%1$s is required"),
 
 		/** ブーリアンへの変換に失敗。 */
 		PARSE_BOOLEAN_FAILURE("could not parse %1$s as boolean: %2$s"),
