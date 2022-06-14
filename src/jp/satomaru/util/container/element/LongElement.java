@@ -9,7 +9,7 @@ import jp.satomaru.util.container.element.parser.ElementParser;
  *
  * @author Satomaru
  */
-public record LongElement(String id, Long value) implements Element<Long> {
+public record LongElement(Object id, Long value) implements Element<Long> {
 
 	public LongElement {
 		Objects.requireNonNull(id, "id");

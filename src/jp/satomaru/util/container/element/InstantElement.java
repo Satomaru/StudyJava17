@@ -10,7 +10,7 @@ import jp.satomaru.util.container.element.parser.ElementParser;
  *
  * @author Satomaru
  */
-public record InstantElement(String id, Instant value) implements Element<Instant> {
+public record InstantElement(Object id, Instant value) implements Element<Instant> {
 
 	public InstantElement {
 		Objects.requireNonNull(id, "id");

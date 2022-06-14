@@ -13,9 +13,9 @@ public class ElementSetSample {
 		var set = ElementSet.array("FOO", 100, true, LocalDateTime.now());
 		var parser = set.parseBy(ElementParser.STRING);
 
-		System.out.println(parser.apply("0"));
-		System.out.println(parser.apply("1"));
-		System.out.println(parser.apply("2"));
-		System.out.println(parser.apply("3"));
+		System.out.println(parser.apply(0));
+		System.out.println(parser.apply(1));
+		System.out.println(parser.apply(2));
+		System.out.println(parser.apply(3));
 	}
 }

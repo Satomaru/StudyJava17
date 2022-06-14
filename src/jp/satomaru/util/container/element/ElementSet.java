@@ -21,7 +21,7 @@ public final class ElementSet {
 	 * @param map 値のマップ
 	 * @return エレメントセット (識別子はマップキー)
 	 */
-	public static ElementSet of(Map<String, ?> map) {
+	public static ElementSet of(Map<?, ?> map) {
 		return new ElementSet(map);
 
 	}
@@ -33,11 +33,11 @@ public final class ElementSet {
 	 * @return エレメントセット (識別子はリストインデックス)
 	 */
 	public static ElementSet of(List<?> list) {
-		HashMap<String, Object> values = new HashMap<>();
+		HashMap<Object, Object> values = new HashMap<>();
 		int index = 0;
 
 		for (Object value : list) {
-			values.put(Integer.toString(index++), value);
+			values.put(index++, value);
 		}
 
 		return new ElementSet(values);
@@ -54,12 +54,12 @@ public final class ElementSet {
 	}
 
 	/** エレメント。 */
-	private final Map<String, Element<?>> elements;
+	private final Map<Object, Element<?>> elements;
 
-	private ElementSet(Map<String, ?> values) {
-		HashMap<String, Element<?>> elements = new HashMap<>();
+	private ElementSet(Map<?, ?> values) {
+		HashMap<Object, Element<?>> elements = new HashMap<>();
 
-		for (Map.Entry<String, ?> entry : values.entrySet()) {
+		for (Map.Entry<?, ?> entry : values.entrySet()) {
 			Element<?> element = Element.of(entry);
 			elements.put(element.id(), element);
 		}
@@ -72,7 +72,7 @@ public final class ElementSet {
 	 *
 	 * @return エレメント
 	 */
-	public Map<String, Element<?>> getElements() {
+	public Map<Object, Element<?>> getElements() {
 		return elements;
 	}
 
@@ -82,7 +82,7 @@ public final class ElementSet {
 	 * @param id 識別子
 	 * @return エレメント
 	 */
-	public Element<?> element(String id) {
+	public Element<?> element(Object id) {
 		return elements.get(id);
 	}
 
@@ -95,7 +95,7 @@ public final class ElementSet {
 	 * @return 値
 	 * @throws ElementException 値の変換に失敗した場合
 	 */
-	public <V> V parse(String id, ElementParser<V> parser) throws ElementException {
+	public <V> V parse(Object id, ElementParser<V> parser) throws ElementException {
 		return element(id).parse(parser);
 	}
 
@@ -106,7 +106,7 @@ public final class ElementSet {
 	 * @param parser エレメントパーサー
 	 * @return 作成した関数
 	 */
-	public <V> ThrowableFunction<String, V, ElementException> parseBy(ElementParser<V> parser) {
+	public <V> ThrowableFunction<Object, V, ElementException> parseBy(ElementParser<V> parser) {
 		return id -> parse(id, parser);
 	}
 }

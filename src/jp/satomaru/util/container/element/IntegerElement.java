@@ -9,7 +9,7 @@ import jp.satomaru.util.container.element.parser.ElementParser;
  *
  * @author Satomaru
  */
-public record IntegerElement(String id, Integer value) implements Element<Integer> {
+public record IntegerElement(Object id, Integer value) implements Element<Integer> {
 
 	public IntegerElement {
 		Objects.requireNonNull(id, "id");

@@ -9,7 +9,7 @@ import jp.satomaru.util.container.element.parser.ElementParser;
  *
  * @author Satomaru
  */
-public record BooleanElement(String id, Boolean value) implements Element<Boolean> {
+public record BooleanElement(Object id, Boolean value) implements Element<Boolean> {
 
 	public BooleanElement {
 		Objects.requireNonNull(id, "id");

@@ -10,7 +10,7 @@ import jp.satomaru.util.container.element.parser.ElementParser;
  *
  * @author Satomaru
  */
-public record LocalDateTimeElement(String id, LocalDateTime value) implements Element<LocalDateTime> {
+public record LocalDateTimeElement(Object id, LocalDateTime value) implements Element<LocalDateTime> {
 
 	public LocalDateTimeElement {
 		Objects.requireNonNull(id, "id");

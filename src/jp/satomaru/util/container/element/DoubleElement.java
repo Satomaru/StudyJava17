@@ -9,7 +9,7 @@ import jp.satomaru.util.container.element.parser.ElementParser;
  *
  * @author Satomaru
  */
-public record DoubleElement(String id, Double value) implements Element<Double> {
+public record DoubleElement(Object id, Double value) implements Element<Double> {
 
 	public DoubleElement {
 		Objects.requireNonNull(id, "id");

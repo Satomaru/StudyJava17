@@ -17,7 +17,7 @@ import jp.satomaru.util.container.element.parser.ElementParser;
  * @param <V> 値
  */
 public sealed interface Element<V> extends
-	IdentifiableValue<String, V>permits BooleanElement, DoubleElement, EmptyElement, InstantElement, IntegerElement, LocalDateTimeElement, LongElement, StringElement {
+	IdentifiableValue<Object, V>permits BooleanElement, DoubleElement, EmptyElement, InstantElement, IntegerElement, LocalDateTimeElement, LongElement, StringElement {
 
 	/**
 	 * エレメントを生成します。
@@ -27,7 +27,7 @@ public sealed interface Element<V> extends
 	 * @return エレメント
 	 * @throws IllegalArgumentException 値の型がサポートされていない場合
 	 */
-	public static Element<?> of(String id, Object value) {
+	public static Element<?> of(Object id, Object value) {
 		if (value == null) {
 			return new EmptyElement(id);
 		}
@@ -71,7 +71,7 @@ public sealed interface Element<V> extends
 	 * @return エレメント
 	 * @throws IllegalArgumentException 値の型がサポートされていない場合
 	 */
-	public static Element<?> of(IdentifiableValue<String, ?> value) {
+	public static Element<?> of(IdentifiableValue<?, ?> value) {
 		return of(value.id(), value.value());
 	}
 
@@ -81,12 +81,12 @@ public sealed interface Element<V> extends
 	 * @param entry 識別子をキーとしたマップのエントリ
 	 * @return エレメント
 	 */
-	public static Element<?> of(Map.Entry<String, ?> entry) {
+	public static Element<?> of(Map.Entry<?, ?> entry) {
 		return of(entry.getKey(), entry.getValue());
 	}
 
 	@Override
-	String id();
+	Object id();
 
 	@Override
 	V value();

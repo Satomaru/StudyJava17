@@ -9,7 +9,7 @@ import jp.satomaru.util.container.element.parser.ElementParser;
  *
  * @author Satomaru
  */
-public record StringElement(String id, String value) implements Element<String> {
+public record StringElement(Object id, String value) implements Element<String> {
 
 	public StringElement {
 		Objects.requireNonNull(id, "id");
