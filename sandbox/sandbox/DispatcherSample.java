@@ -1,7 +1,5 @@
 package sandbox;
 
-import java.util.Map;
-
 import jp.satomaru.util.Dispatcher;
 import jp.satomaru.util.container.element.ElementException;
 import jp.satomaru.util.container.element.ElementSet;
@@ -22,8 +20,8 @@ public class DispatcherSample {
 			throw new IllegalArgumentException("Three arguments are required.");
 		}
 
-		ElementSet elements = ElementSet.of(Map.of("arg1", args[1], "arg2", args[2]));
-		DispatcherSample me = new DispatcherSample();
+		var elements = ElementSet.put("arg1", args[1]).put("arg2", args[2]).build();
+		var me = new DispatcherSample();
 
 		DISPATCHER.run(me, elements, args[0])
 			.ifPresentRight(right -> System.out.println(String.format("Result: %s", right)))

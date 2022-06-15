@@ -15,6 +15,48 @@ import jp.satomaru.util.function.ThrowableFunction;
  */
 public final class ElementSet {
 
+	/** エレメントセットのビルダー。 */
+	public static final class Builder {
+
+		private final HashMap<Object, Object> values = new HashMap<>();
+
+		private Builder(Object id, Object value) {
+			values.put(id, value);
+		}
+
+		/**
+		 * エレメントを登録します。
+		 *
+		 * @param id    エレメントの識別子
+		 * @param value エレメントの値
+		 * @return エレメントセットのビルダー
+		 */
+		public Builder put(Object id, Object value) {
+			values.put(id, value);
+			return this;
+		}
+
+		/**
+		 * エレメントセットを生成します。
+		 *
+		 * @return エレメントセット
+		 */
+		public ElementSet build() {
+			return new ElementSet(values);
+		}
+	}
+
+	/**
+	 * エレメントを登録します。
+	 *
+	 * @param id    エレメントの識別子
+	 * @param value エレメントの値
+	 * @return エレメントセットのビルダー
+	 */
+	public static Builder put(Object id, Object value) {
+		return new Builder(id, value);
+	}
+
 	/**
 	 * エレメントセットを生成します。
 	 *
