@@ -28,35 +28,19 @@ public interface ThrowableFunction<T, R, E extends Exception> {
 	/**
 	 * 実行します。
 	 *
-	 * @param thrown Eitherに格納される例外の型（非検査例外は不可）
-	 * @param arg    引数
+	 * @param arg 引数
 	 * @return 実行結果（非検査例外の場合は、そのままスローされます）
 	 */
-	default Either<E, R> run(Class<E> thrown, T arg) {
-		if (RuntimeException.class.isAssignableFrom(thrown)) {
-			throw new IllegalArgumentException("thrown should not be an unchecked exception");
-		}
-
+	default Either<E, R> run(T arg) {
 		try {
 			return new Either.Right<>(apply(arg));
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {
-			return new Either.Left<>(thrown.cast(e));
-		}
-	}
+			@SuppressWarnings("unchecked")
+			E left = (E) e;
 
-	/**
-	 * Functionに変換します。
-	 *
-	 * @param thrown Eitherに格納される例外の型（非検査例外は不可）
-	 * @return 変換されたFunction（非検査例外の場合は、そのままスローされます）
-	 */
-	default Function<T, Either<E, R>> function(Class<E> thrown) {
-		if (RuntimeException.class.isAssignableFrom(thrown)) {
-			throw new IllegalArgumentException("thrown should not be an unchecked exception");
+			return new Either.Left<>(left);
 		}
-
-		return arg -> run(thrown, arg);
 	}
 }
