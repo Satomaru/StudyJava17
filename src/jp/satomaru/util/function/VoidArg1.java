@@ -33,21 +33,9 @@ public interface VoidArg1<A1> {
 	 * 実行します。
 	 *
 	 * @param arg1 引数1
-	 * @return 発生した例外
+	 * @return 発生した例外（非検査例外の場合は、そのままスローされます）
 	 */
 	default Optional<Exception> run(A1 arg1) {
 		return inject(arg1).run();
-	}
-
-	/**
-	 * 実行後、引数1を返却する関数を作成します。
-	 *
-	 * @return 作成した関数
-	 */
-	default RetArg1<A1, A1> retA1() {
-		return arg1 -> {
-			execute(arg1);
-			return arg1;
-		};
 	}
 }

@@ -36,33 +36,9 @@ public interface VoidArg2<A1, A2> {
 	 *
 	 * @param arg1 引数1
 	 * @param arg2 引数2
-	 * @return 発生した例外
+	 * @return 発生した例外（非検査例外の場合は、そのままスローされます）
 	 */
 	default Optional<Exception> run(A1 arg1, A2 arg2) {
 		return inject(arg1).inject(arg2).run();
-	}
-
-	/**
-	 * 実行後、引数1を返却する関数を作成します。
-	 *
-	 * @return 作成した関数
-	 */
-	default RetArg2<A1, A2, A1> retA1() {
-		return (arg1, arg2) -> {
-			execute(arg1, arg2);
-			return arg1;
-		};
-	}
-
-	/**
-	 * 実行後、引数2を返却する関数を作成します。
-	 *
-	 * @return 作成した関数
-	 */
-	default RetArg2<A1, A2, A2> retA2() {
-		return (arg1, arg2) -> {
-			execute(arg1, arg2);
-			return arg2;
-		};
 	}
 }

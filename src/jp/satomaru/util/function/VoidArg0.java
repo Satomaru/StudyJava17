@@ -20,12 +20,14 @@ public interface VoidArg0 {
 	/**
 	 * 実行します。
 	 *
-	 * @return 発生した例外
+	 * @return 発生した例外（非検査例外の場合は、そのままスローされます）
 	 */
 	default Optional<Exception> run() {
 		try {
 			execute();
 			return Optional.empty();
+		} catch (RuntimeException e) {
+			throw e;
 		} catch (Exception e) {
 			return Optional.of(e);
 		}

@@ -38,7 +38,7 @@ public interface RetArg2<A1, A2, R> {
 	 *
 	 * @param arg1 引数1
 	 * @param arg2 引数2
-	 * @return 実行結果
+	 * @return 実行結果（非検査例外の場合は、そのままスローされます）
 	 */
 	default Either<Exception, R> run(A1 arg1, A2 arg2) {
 		return inject(arg1).inject(arg2).run();
