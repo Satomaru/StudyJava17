@@ -74,17 +74,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 		public Either<L, R> ifPresentRight(Consumer<? super R> action) {
 			return this;
 		}
-
-		@Override
-		public <T extends L> Either<L, R> ifLeft(Class<T> expected, Consumer<? super T> action) {
-			optional().filter(expected::isInstance).map(expected::cast).ifPresent(action);
-			return this;
-		}
-
-		@Override
-		public <T extends R> Either<L, R> ifRight(Class<T> expected, Consumer<? super T> action) {
-			return this;
-		}
 	}
 
 	/**
@@ -143,17 +132,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 		@Override
 		public Either<L, R> ifPresentRight(Consumer<? super R> action) {
 			optional().ifPresent(action);
-			return this;
-		}
-
-		@Override
-		public <T extends L> Either<L, R> ifLeft(Class<T> expected, Consumer<? super T> action) {
-			return this;
-		}
-
-		@Override
-		public <T extends R> Either<L, R> ifRight(Class<T> expected, Consumer<? super T> action) {
-			optional().filter(expected::isInstance).map(expected::cast).ifPresent(action);
 			return this;
 		}
 	}
@@ -244,26 +222,6 @@ public sealed interface Either<L, R> permits Left<L, R>, Right<L, R> {
 	 * @return このオブジェクト自身
 	 */
 	Either<L, R> ifPresentRight(Consumer<? super R> action);
-
-	/**
-	 * 左の値を保持していて、かつ期待する型の場合、指定された関数を実行します。
-	 *
-	 * @param <T>      左の値を期待する型に変換した値
-	 * @param expected 期待する型
-	 * @param action   実行する関数
-	 * @return このオブジェクト自身
-	 */
-	<T extends L> Either<L, R> ifLeft(Class<T> expected, Consumer<? super T> action);
-
-	/**
-	 * 右の値を保持していて、かつ期待する型の場合、指定された関数を実行します。
-	 *
-	 * @param <T>      右の値を期待する型に変換した値
-	 * @param expected 期待する型
-	 * @param action   実行する関数
-	 * @return このオブジェクト自身
-	 */
-	<T extends R> Either<L, R> ifRight(Class<T> expected, Consumer<? super T> action);
 
 	/**
 	 * 右の型を保持していることを判定します。

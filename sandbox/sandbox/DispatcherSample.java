@@ -1,50 +1,78 @@
 package sandbox;
 
-import jp.satomaru.util.Dispatcher;
-import jp.satomaru.util.container.element.ElementException;
-import jp.satomaru.util.container.element.ElementSet;
-import jp.satomaru.util.container.element.parser.ElementParser;
-import jp.satomaru.util.function.RetArg3;
+import jp.satomaru.util.component.ComponentException;
+import jp.satomaru.util.component.Dispatcher;
+import jp.satomaru.util.component.ProcedureException;
+import jp.satomaru.util.component.element.ElementSet;
+import jp.satomaru.util.component.element.parser.ElementParser;
+import jp.satomaru.util.console.StdIn;
+import jp.satomaru.util.console.StdOut;
 
 public class DispatcherSample {
 
-	private static final RetArg3<DispatcherSample, ElementSet, String, Integer> DISPATCHER = Dispatcher
-		.begin("a", DispatcherSample::add)
-		.append("s", DispatcherSample::subtract)
-		.append("m", DispatcherSample::multiply)
-		.append("d", DispatcherSample::divide)
-		.end();
+	private static final Dispatcher<DispatcherSample, Integer> DISPATCHER = Dispatcher.Builder
+		.begin("+", DispatcherSample::add)
+		.append("-", DispatcherSample::subtract)
+		.append("*", DispatcherSample::multiply)
+		.append("/", DispatcherSample::divide)
+		.end("operator");
 
 	public static void main(String[] args) {
-		if (args.length != 3) {
-			throw new IllegalArgumentException("Three arguments are required.");
-		}
-
-		var elements = ElementSet.put("arg1", args[1]).put("arg2", args[2]).build();
 		var me = new DispatcherSample();
 
-		DISPATCHER.run(me, elements, args[0])
-			.ifPresentRight(right -> System.out.println(String.format("Result: %s", right)))
-			.ifPresentLeft(left -> System.out.println(String.format("Error: %s", left)));
+		do {
+			var input = StdIn.readSsv("exp> ");
+
+			if (input.isEmpty()) {
+				break;
+			}
+
+			var elements = ElementSet.of(input, "arg1", "operator", "arg2");
+
+			DISPATCHER.run(me, elements)
+				.ifPresentRight(DispatcherSample::whenOk)
+				.ifPresentLeft(DispatcherSample::whenNg);
+		} while (true);
 	}
 
-	public int add(ElementSet elements) throws ElementException {
-		var parser = elements.parseOrThrowBy(ElementParser.INTEGER);
-		return parser.apply("arg1") + parser.apply("arg2");
+	private static void whenOk(Integer result) {
+		StdOut.writeLine(" = ", result);
 	}
 
-	public int subtract(ElementSet elements) throws ElementException {
-		var parser = elements.parseOrThrowBy(ElementParser.INTEGER);
-		return parser.apply("arg1") - parser.apply("arg2");
+	private static void whenNg(ComponentException exception) {
+		StdOut.writeLine(" *ERROR* ", exception.getLocalizedMessage());
 	}
 
-	public int multiply(ElementSet elements) throws ElementException {
+	public Integer add(ElementSet elements) throws ComponentException {
 		var parser = elements.parseOrThrowBy(ElementParser.INTEGER);
-		return parser.apply("arg1") * parser.apply("arg2");
+		Integer arg1 = parser.apply("arg1");
+		Integer arg2 = parser.apply("arg2");
+		return arg1 + arg2;
 	}
 
-	public int divide(ElementSet elements) throws ElementException {
+	public Integer subtract(ElementSet elements) throws ComponentException {
 		var parser = elements.parseOrThrowBy(ElementParser.INTEGER);
-		return parser.apply("arg1") / parser.apply("arg2");
+		Integer arg1 = parser.apply("arg1");
+		Integer arg2 = parser.apply("arg2");
+		return arg1 - arg2;
+	}
+
+	public Integer multiply(ElementSet elements) throws ComponentException {
+		var parser = elements.parseOrThrowBy(ElementParser.INTEGER);
+		Integer arg1 = parser.apply("arg1");
+		Integer arg2 = parser.apply("arg2");
+		return arg1 * arg2;
+	}
+
+	public Integer divide(ElementSet elements) throws ComponentException {
+		var parser = elements.parseOrThrowBy(ElementParser.INTEGER);
+		Integer arg1 = parser.apply("arg1");
+		Integer arg2 = parser.apply("arg2");
+
+		if (arg2 == 0) {
+			throw new ProcedureException("divide", "DIVIDE_BY_ZERO");
+		}
+
+		return arg1 / arg2;
 	}
 }

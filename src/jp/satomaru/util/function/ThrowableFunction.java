@@ -11,7 +11,7 @@ import jp.satomaru.util.Either;
  *
  * @param <T> 引数
  * @param <R> 戻り値
- * @param <E> 例外
+ * @param <E> 例外（非検査例外は不可）
  */
 @FunctionalInterface
 public interface ThrowableFunction<T, R, E extends Exception> {
