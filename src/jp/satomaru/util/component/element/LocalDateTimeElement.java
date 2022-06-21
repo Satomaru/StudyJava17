@@ -3,14 +3,16 @@ package jp.satomaru.util.component.element;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import jp.satomaru.util.component.element.parser.ElementParser;
+import jp.satomaru.util.component.ComponentException;
+import jp.satomaru.util.component.ComponentId;
+import jp.satomaru.util.component.element.mapper.ElementMapper;
 
 /**
  * ローカル日時を保持するエレメントです。
  *
  * @author Satomaru
  */
-public record LocalDateTimeElement(Object id, LocalDateTime value) implements Element<LocalDateTime> {
+public record LocalDateTimeElement(ComponentId id, LocalDateTime value) implements Element<LocalDateTime> {
 
 	public LocalDateTimeElement {
 		Objects.requireNonNull(id, "id");
@@ -18,12 +20,7 @@ public record LocalDateTimeElement(Object id, LocalDateTime value) implements El
 	}
 
 	@Override
-	public Element<?> map(ElementParser<?> parser) throws ElementException {
-		return parser.parse(this);
-	}
-
-	@Override
-	public <P> P parse(ElementParser<P> parser) throws ElementException {
-		return parser.parse(this).value();
+	public <T> Element<T> map(ElementMapper<T> mapper) throws ComponentException {
+		return mapper.map(this);
 	}
 }

@@ -1,28 +1,28 @@
-package jp.satomaru.util.component.element.parser;
+package jp.satomaru.util.component.element.mapper;
 
 import java.util.Set;
 
+import jp.satomaru.util.component.ComponentException;
+import jp.satomaru.util.component.ComponentException.ErrorCode;
 import jp.satomaru.util.component.element.BooleanElement;
 import jp.satomaru.util.component.element.DoubleElement;
 import jp.satomaru.util.component.element.Element;
-import jp.satomaru.util.component.element.ElementException;
 import jp.satomaru.util.component.element.IntegerElement;
 import jp.satomaru.util.component.element.LongElement;
 import jp.satomaru.util.component.element.StringElement;
-import jp.satomaru.util.component.element.ElementException.ErrorCode;
 
-final class ToBoolean extends ElementParser<Boolean> {
+final class ToBoolean extends ElementMapper<Boolean> {
 
 	private static final Set<String> TRUTHY = Set.of("true", "on", "yes", "ok");
 	private static final Set<String> FALSY = Set.of("false", "off", "no", "ng");
 
 	@Override
-	public Element<Boolean> parse(BooleanElement element) throws ElementException {
+	public Element<Boolean> map(BooleanElement element) throws ComponentException {
 		return element;
 	}
 
 	@Override
-	public Element<Boolean> parse(DoubleElement element) throws ElementException {
+	public Element<Boolean> map(DoubleElement element) throws ComponentException {
 		return map(element, value -> {
 			if (value == -1.0D) {
 				return true;
@@ -37,7 +37,7 @@ final class ToBoolean extends ElementParser<Boolean> {
 	}
 
 	@Override
-	public Element<Boolean> parse(IntegerElement element) throws ElementException {
+	public Element<Boolean> map(IntegerElement element) throws ComponentException {
 		return map(element, value -> {
 			if (value == -1) {
 				return true;
@@ -52,7 +52,7 @@ final class ToBoolean extends ElementParser<Boolean> {
 	}
 
 	@Override
-	public Element<Boolean> parse(LongElement element) throws ElementException {
+	public Element<Boolean> map(LongElement element) throws ComponentException {
 		return map(element, value -> {
 			if (value == -1L) {
 				return true;
@@ -67,7 +67,7 @@ final class ToBoolean extends ElementParser<Boolean> {
 	}
 
 	@Override
-	public Element<Boolean> parse(StringElement element) throws ElementException {
+	public Element<Boolean> map(StringElement element) throws ComponentException {
 		return map(element, value -> {
 			String lowerCase = value.toLowerCase();
 
@@ -85,12 +85,12 @@ final class ToBoolean extends ElementParser<Boolean> {
 	}
 
 	@Override
-	protected Element<Boolean> set(Element<?> element, Boolean newValue) {
+	protected Element<Boolean> create(Element<?> element, Boolean newValue) {
 		return new BooleanElement(element.id(), newValue);
 	}
 
 	@Override
-	protected ErrorCode typeWhenParseFailure() {
+	protected ErrorCode errorCode() {
 		return ErrorCode.PARSE_BOOLEAN_FAILURE;
 	}
 }

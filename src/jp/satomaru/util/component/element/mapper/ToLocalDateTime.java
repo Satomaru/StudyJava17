@@ -1,4 +1,4 @@
-package jp.satomaru.util.component.element.parser;
+package jp.satomaru.util.component.element.mapper;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -7,37 +7,37 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jp.satomaru.util.component.ComponentException;
+import jp.satomaru.util.component.ComponentException.ErrorCode;
 import jp.satomaru.util.component.element.Element;
-import jp.satomaru.util.component.element.ElementException;
 import jp.satomaru.util.component.element.InstantElement;
 import jp.satomaru.util.component.element.LocalDateTimeElement;
 import jp.satomaru.util.component.element.LongElement;
 import jp.satomaru.util.component.element.StringElement;
-import jp.satomaru.util.component.element.ElementException.ErrorCode;
 
-final class ToLocalDateTime extends ElementParser<LocalDateTime> {
+final class ToLocalDateTime extends ElementMapper<LocalDateTime> {
 
 	private static final Pattern DATETIME_PATTERN = Pattern.compile(
 		"(?<year>\\d{4})[/.-](?<month>\\d{2})[/.-](?<dayOfMonth>\\d{2})"
 			+ "([T ](?<hour>\\d{2}):(?<minute>\\d{2}):(?<second>\\d{2})(\\.(?<milliOfSecond>\\d{3}))?)?");
 
 	@Override
-	public Element<LocalDateTime> parse(InstantElement element) throws ElementException {
+	public Element<LocalDateTime> map(InstantElement element) throws ComponentException {
 		return map(element, value -> value.atZone(ZoneId.systemDefault()).toLocalDateTime());
 	}
 
 	@Override
-	public Element<LocalDateTime> parse(LocalDateTimeElement element) throws ElementException {
+	public Element<LocalDateTime> map(LocalDateTimeElement element) throws ComponentException {
 		return element;
 	}
 
 	@Override
-	public Element<LocalDateTime> parse(LongElement element) throws ElementException {
+	public Element<LocalDateTime> map(LongElement element) throws ComponentException {
 		return map(element, value -> Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDateTime());
 	}
 
 	@Override
-	public Element<LocalDateTime> parse(StringElement element) throws ElementException {
+	public Element<LocalDateTime> map(StringElement element) throws ComponentException {
 		return map(element, value -> {
 			Matcher matcher = DATETIME_PATTERN.matcher(value);
 
@@ -57,12 +57,12 @@ final class ToLocalDateTime extends ElementParser<LocalDateTime> {
 	}
 
 	@Override
-	protected Element<LocalDateTime> set(Element<?> element, LocalDateTime newValue) {
+	protected Element<LocalDateTime> create(Element<?> element, LocalDateTime newValue) {
 		return new LocalDateTimeElement(element.id(), newValue);
 	}
 
 	@Override
-	protected ErrorCode typeWhenParseFailure() {
+	protected ErrorCode errorCode() {
 		return ErrorCode.PARSE_LOCALDATETIME_FAILURE;
 	}
 }

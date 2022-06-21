@@ -3,14 +3,16 @@ package jp.satomaru.util.component.element;
 import java.time.Instant;
 import java.util.Objects;
 
-import jp.satomaru.util.component.element.parser.ElementParser;
+import jp.satomaru.util.component.ComponentException;
+import jp.satomaru.util.component.ComponentId;
+import jp.satomaru.util.component.element.mapper.ElementMapper;
 
 /**
  * インスタントを保持するエレメントです。
  *
  * @author Satomaru
  */
-public record InstantElement(Object id, Instant value) implements Element<Instant> {
+public record InstantElement(ComponentId id, Instant value) implements Element<Instant> {
 
 	public InstantElement {
 		Objects.requireNonNull(id, "id");
@@ -18,12 +20,7 @@ public record InstantElement(Object id, Instant value) implements Element<Instan
 	}
 
 	@Override
-	public Element<?> map(ElementParser<?> parser) throws ElementException {
-		return parser.parse(this);
-	}
-
-	@Override
-	public <P> P parse(ElementParser<P> parser) throws ElementException {
-		return parser.parse(this).value();
+	public <T> Element<T> map(ElementMapper<T> mapper) throws ComponentException {
+		return mapper.map(this);
 	}
 }

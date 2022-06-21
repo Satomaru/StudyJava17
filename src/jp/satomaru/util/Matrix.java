@@ -5,37 +5,11 @@ import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import jp.satomaru.util.function.IndexedComsumer;
+import jp.satomaru.util.function.TwoDimConsumer;
+import jp.satomaru.util.function.TwoDimSupplier;
+
 public final class Matrix<T> {
-
-	@FunctionalInterface
-	public interface CellGenerator<T> {
-		T generate(int x, int y);
-	}
-
-	@FunctionalInterface
-	public interface CellGeneratorOfLine<T> {
-		T generate(int index);
-	}
-
-	@FunctionalInterface
-	public interface CellAcceptor<T> {
-		void accept(int x, int y, T value);
-	}
-
-	@FunctionalInterface
-	public interface CellAcceptorOfLine<T> {
-		void accept(int index, T value);
-	}
-
-	@FunctionalInterface
-	public interface RowAcceptor<T> {
-		void accept(int y, Matrix<T>.Row row);
-	}
-
-	@FunctionalInterface
-	public interface ColAcceptor<T> {
-		void accept(int x, Matrix<T>.Col col);
-	}
 
 	public abstract sealed class Line permits Row, Col {
 
@@ -53,13 +27,13 @@ public final class Matrix<T> {
 			return get(index).equals(value);
 		}
 
-		public final void fill(CellGeneratorOfLine<T> generator) {
+		public final void fill(IntFunction<T> generator) {
 			for (int index = 0; index < count; index++) {
-				set(index, generator.generate(index));
+				set(index, generator.apply(index));
 			}
 		}
 
-		public final void forEach(CellAcceptorOfLine<T> acceptor) {
+		public final void forEach(IndexedComsumer<T> acceptor) {
 			for (int index = 0; index < count; index++) {
 				acceptor.accept(index, get(index));
 			}
@@ -150,15 +124,15 @@ public final class Matrix<T> {
 		return get(x, y).equals(value);
 	}
 
-	public void fill(CellGenerator<T> generator) {
+	public void fill(TwoDimSupplier<T> generator) {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				set(x, y, generator.generate(x, y));
+				set(x, y, generator.get(x, y));
 			}
 		}
 	}
 
-	public void forEach(CellAcceptor<T> acceptor) {
+	public void forEach(TwoDimConsumer<T> acceptor) {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				acceptor.accept(x, y, get(x, y));
@@ -166,13 +140,13 @@ public final class Matrix<T> {
 		}
 	}
 
-	public void forEachRow(RowAcceptor<T> acceptor) {
+	public void forEachRow(IndexedComsumer<Row> acceptor) {
 		for (int y = 0; y < height; y++) {
 			acceptor.accept(y, row(y));
 		}
 	}
 
-	public void forEachCol(ColAcceptor<T> acceptor) {
+	public void forEachCol(IndexedComsumer<Col> acceptor) {
 		for (int x = 0; x < width; x++) {
 			acceptor.accept(x, col(x));
 		}

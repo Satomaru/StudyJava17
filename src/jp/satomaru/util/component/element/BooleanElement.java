@@ -2,14 +2,16 @@ package jp.satomaru.util.component.element;
 
 import java.util.Objects;
 
-import jp.satomaru.util.component.element.parser.ElementParser;
+import jp.satomaru.util.component.ComponentException;
+import jp.satomaru.util.component.ComponentId;
+import jp.satomaru.util.component.element.mapper.ElementMapper;
 
 /**
  * ブーリアンを保持するエレメントです。
  *
  * @author Satomaru
  */
-public record BooleanElement(Object id, Boolean value) implements Element<Boolean> {
+public record BooleanElement(ComponentId id, Boolean value) implements Element<Boolean> {
 
 	public BooleanElement {
 		Objects.requireNonNull(id, "id");
@@ -17,12 +19,7 @@ public record BooleanElement(Object id, Boolean value) implements Element<Boolea
 	}
 
 	@Override
-	public Element<?> map(ElementParser<?> parser) throws ElementException {
-		return parser.parse(this);
-	}
-
-	@Override
-	public <P> P parse(ElementParser<P> parser) throws ElementException {
-		return parser.parse(this).value();
+	public <T> Element<T> map(ElementMapper<T> mapper) throws ComponentException {
+		return mapper.map(this);
 	}
 }
