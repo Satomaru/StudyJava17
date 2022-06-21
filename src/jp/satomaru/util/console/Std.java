@@ -101,6 +101,12 @@ public final class Std {
 			return this;
 		}
 
+		public StdOut writeLine() {
+			newLine();
+			flush();
+			return this;
+		}
+
 		public StdOut join(Object[] objects, String delimiter) {
 			joinObjects(objects, delimiter);
 			flush();
@@ -109,6 +115,19 @@ public final class Std {
 
 		public StdOut joinLine(Object[] objects, String delimiter) {
 			joinObjects(objects, delimiter);
+			newLine();
+			flush();
+			return this;
+		}
+
+		public StdOut format(String pattern, Object... objects) {
+			writeObjects(String.format(pattern, objects));
+			flush();
+			return this;
+		}
+
+		public StdOut formatLine(String pattern, Object... objects) {
+			writeObjects(String.format(pattern, objects));
 			newLine();
 			flush();
 			return this;
