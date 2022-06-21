@@ -5,7 +5,7 @@ import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import jp.satomaru.util.function.IndexedComsumer;
+import jp.satomaru.util.function.IndexedConsumer;
 import jp.satomaru.util.function.TwoDimConsumer;
 import jp.satomaru.util.function.TwoDimSupplier;
 
@@ -33,7 +33,7 @@ public final class Matrix<T> {
 			}
 		}
 
-		public final void forEach(IndexedComsumer<T> acceptor) {
+		public final void forEach(IndexedConsumer<T> acceptor) {
 			for (int index = 0; index < count; index++) {
 				acceptor.accept(index, get(index));
 			}
@@ -140,13 +140,13 @@ public final class Matrix<T> {
 		}
 	}
 
-	public void forEachRow(IndexedComsumer<Row> acceptor) {
+	public void forEachRow(IndexedConsumer<Row> acceptor) {
 		for (int y = 0; y < height; y++) {
 			acceptor.accept(y, row(y));
 		}
 	}
 
-	public void forEachCol(IndexedComsumer<Col> acceptor) {
+	public void forEachCol(IndexedConsumer<Col> acceptor) {
 		for (int x = 0; x < width; x++) {
 			acceptor.accept(x, col(x));
 		}

@@ -1,7 +1,7 @@
 package jp.satomaru.util.function;
 
 @FunctionalInterface
-public interface IndexedComsumer<T> {
+public interface IndexedConsumer<T> {
 
 	void accept(int index, T value);
 }
