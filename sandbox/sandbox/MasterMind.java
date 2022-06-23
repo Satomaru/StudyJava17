@@ -1,10 +1,12 @@
 package sandbox;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
+import jp.satomaru.util.BlockFormatter;
+import jp.satomaru.util.CharBlockBuilder;
 import jp.satomaru.util.Lottery;
 import jp.satomaru.util.Matrix;
-import jp.satomaru.util.console.Std;
 
 /**
  * マスターマインド。
@@ -16,52 +18,61 @@ import jp.satomaru.util.console.Std;
 public final class MasterMind {
 
 	public static void main(String[] args) {
-		MasterMind me = new MasterMind(5, 5);
+		MasterMind me = new MasterMind();
 		me.initialize();
 		me.show();
 	}
 
-	private final int width;
-	private final int count;
-	private final Matrix<Integer> answer;
-	private final Matrix<Integer> field;
-	private final Integer[] hHits;
-	private final Integer[] hBlows;
-	private final Integer[] vHits;
-	private final Integer[] vBlows;
+	public static final String BACKGROUND = """
+		+--+--+--+
+		|**|**|**|* *
+		+--+--+--+
+		|**|**|**|* *
+		+--+--+--+
+		|**|**|**|* *
+		+--+--+--+
+		 ** ** **
+		 ** ** **
+		""";
 
-	public MasterMind(int width, int height) {
-		this.width = width;
-		count = width * height;
-		answer = new Matrix<>(width, height, Integer[]::new);
-		field = new Matrix<>(width, height, Integer[]::new);
-		hHits = new Integer[height];
-		hBlows = new Integer[height];
-		vHits = new Integer[width];
-		vBlows = new Integer[width];
+	private final Matrix<Integer> answer = new Matrix<>(3, 3, Integer[]::new);
+	private final Matrix<Integer> field = new Matrix<>(3, 3, Integer[]::new);
+	private final Integer[] hHits = new Integer[3];
+	private final Integer[] hBlows = new Integer[3];
+	private final Integer[] vHits = new Integer[3];
+	private final Integer[] vBlows = new Integer[3];
+	private final BlockFormatter formatter;
+
+	public MasterMind() {
+		CharBlockBuilder background = new CharBlockBuilder(13, 9);
+		background.fill(' ');
+		background.set(0, 0, BACKGROUND);
+
+		formatter = new BlockFormatter(background);
+
+		IntStream.range(0, 3).forEach(y -> {
+			IntStream.range(0, 3).forEach(x -> {
+				formatter.addLabel(x * 3 + 1, y * 2 + 1, "%2d", () -> field.get(x, y));
+			});
+		});
+
+		IntStream.range(0, 3).forEach(index -> {
+			formatter.addLabel(10, index * 2 + 1, "%d", () -> hHits[index]);
+			formatter.addLabel(12, index * 2 + 1, "%d", () -> hBlows[index]);
+			formatter.addLabel(index * 3 + 1, 7, "%2d", () -> vHits[index]);
+			formatter.addLabel(index * 3 + 1, 8, "%2d", () -> vBlows[index]);
+		});
 	}
 
 	public void initialize() {
-		Lottery<Integer> values = Lottery.generate(count, 1, previous -> previous + 1);
+		Lottery<Integer> values = Lottery.generate(9, 1, previous -> previous + 1);
 		answer.fill((x, y) -> values.next());
-		field.fill((x, y) -> 1 + x + y * width);
+		field.fill((x, y) -> 1 + x + y * 3);
 		judge();
 	}
 
 	public void show() {
-		Std.out.writeLine("+", "--+".repeat(width));
-
-		field.forEachRow((y, row) -> {
-			row.forEach((x, value) -> Std.out.format("|%2d", value));
-			Std.out.formatLine("| %2d %2d", hHits[y], hBlows[y]);
-			Std.out.writeLine("+", "--+".repeat(width));
-		});
-
-		Arrays.stream(vHits).forEach(hit -> Std.out.format(" %2d", hit));
-		Std.out.writeLine();
-
-		Arrays.stream(vBlows).forEach(blow -> Std.out.format(" %2d", blow));
-		Std.out.writeLine();
+		System.out.println(formatter.format());
 	}
 
 	private boolean judge() {
@@ -85,6 +96,6 @@ public final class MasterMind {
 			}
 		});
 
-		return Arrays.stream(hHits).allMatch(hit -> hit == width);
+		return Arrays.stream(hHits).allMatch(hit -> hit == 3);
 	}
 }
