@@ -30,7 +30,7 @@ public class BlockFormatter {
 	private final List<Label> labels = new ArrayList<>();
 
 	public BlockFormatter(CharBlockBuilder background) {
-		this.background = background;
+		this.background = background.clone();
 	}
 
 	public void addLabel(int left, int top, Supplier<String> bind) {

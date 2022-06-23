@@ -23,4 +23,9 @@ public record LocalDateTimeElement(ComponentId id, LocalDateTime value) implemen
 	public <T> Element<T> map(ElementMapper<T> mapper) throws ComponentException {
 		return mapper.map(this);
 	}
+
+	@Override
+	public LocalDateTimeElement rename(String newName) {
+		return new LocalDateTimeElement(id.rename(newName), value);
+	}
 }

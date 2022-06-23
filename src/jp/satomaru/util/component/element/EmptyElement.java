@@ -26,4 +26,9 @@ public record EmptyElement<V> (ComponentId id) implements Element<V> {
 	public <T> Element<T> map(ElementMapper<T> mapper) throws ComponentException {
 		return new EmptyElement<>(id);
 	}
+
+	@Override
+	public EmptyElement<V> rename(String newName) {
+		return new EmptyElement<>(id.rename(newName));
+	}
 }

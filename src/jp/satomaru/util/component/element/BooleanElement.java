@@ -22,4 +22,9 @@ public record BooleanElement(ComponentId id, Boolean value) implements Element<B
 	public <T> Element<T> map(ElementMapper<T> mapper) throws ComponentException {
 		return mapper.map(this);
 	}
+
+	@Override
+	public BooleanElement rename(String newName) {
+		return new BooleanElement(id.rename(newName), value);
+	}
 }

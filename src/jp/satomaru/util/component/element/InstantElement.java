@@ -23,4 +23,9 @@ public record InstantElement(ComponentId id, Instant value) implements Element<I
 	public <T> Element<T> map(ElementMapper<T> mapper) throws ComponentException {
 		return mapper.map(this);
 	}
+
+	@Override
+	public InstantElement rename(String newName) {
+		return new InstantElement(id.rename(newName), value);
+	}
 }

@@ -22,4 +22,9 @@ public record IntegerElement(ComponentId id, Integer value) implements Element<I
 	public <T> Element<T> map(ElementMapper<T> mapper) throws ComponentException {
 		return mapper.map(this);
 	}
+
+	@Override
+	public IntegerElement rename(String newName) {
+		return new IntegerElement(id.rename(newName), value);
+	}
 }

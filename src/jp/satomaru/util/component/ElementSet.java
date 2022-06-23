@@ -32,4 +32,12 @@ public final class ElementSet {
 	public <V> ElementParser<V> parseOrThrowBy(ElementMapper<V> mapper) {
 		return name -> get(name).parseOrThrow(mapper);
 	}
+
+	public <V> ElementParserWithRename<V> parseAndRenameBy(ElementMapper<V> mapper) {
+		return (name, newName) -> get(name).rename(newName).parse(mapper);
+	}
+
+	public <V> ElementParserWithRename<V> parseAndRenameOrThrowBy(ElementMapper<V> mapper) {
+		return (name, newName) -> get(name).rename(newName).parseOrThrow(mapper);
+	}
 }

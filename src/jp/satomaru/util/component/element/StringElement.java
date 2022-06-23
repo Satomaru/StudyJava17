@@ -22,4 +22,9 @@ public record StringElement(ComponentId id, String value) implements Element<Str
 	public <T> Element<T> map(ElementMapper<T> mapper) throws ComponentException {
 		return mapper.map(this);
 	}
+
+	@Override
+	public StringElement rename(String newName) {
+		return new StringElement(id.rename(newName), value);
+	}
 }

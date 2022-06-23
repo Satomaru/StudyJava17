@@ -15,4 +15,8 @@ public record ComponentId(Class<?> type, String name) {
 	public String keyWithoutName(String subkey) {
 		return Strings.join(type.getName(), ".", subkey);
 	}
+
+	public ComponentId rename(String newName) {
+		return new ComponentId(type, newName);
+	}
 }

@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import jp.satomaru.util.component.ComponentException.ErrorCode;
 import jp.satomaru.util.component.element.BooleanElement;
@@ -51,6 +53,8 @@ public final class Component<M> {
 			};
 		}
 	}
+
+	private static final Pattern SPACE_PATTERN = Pattern.compile("\\s+");
 
 	private final Class<M> type;
 
@@ -127,5 +131,10 @@ public final class Component<M> {
 
 	public ElementSet elements(Object[] values, String... names) {
 		return elements(Arrays.asList(values), names);
+	}
+
+	public ElementSet elements(Scanner scanner, String... names) {
+		String[] ssv = SPACE_PATTERN.split(scanner.nextLine());
+		return elements(ssv, names);
 	}
 }

@@ -1,6 +1,7 @@
 package jp.satomaru.util;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -22,6 +23,8 @@ public final class Matrix<T> {
 		public abstract T get(int index);
 
 		public abstract void set(int index, T value);
+
+		public abstract Cell cell(int index);
 
 		public final boolean is(int index, T value) {
 			return get(index).equals(value);
@@ -62,6 +65,11 @@ public final class Matrix<T> {
 		public void set(int index, T value) {
 			Matrix.this.set(index, y, value);
 		}
+
+		@Override
+		public Cell cell(int index) {
+			return new Cell(index, y);
+		}
 	}
 
 	public final class Col extends Line {
@@ -81,6 +89,29 @@ public final class Matrix<T> {
 		@Override
 		public void set(int index, T value) {
 			Matrix.this.set(x, index, value);
+		}
+
+		@Override
+		public Cell cell(int index) {
+			return new Cell(x, index);
+		}
+	}
+
+	public final class Cell {
+
+		private final int x;
+
+		private final int y;
+
+		private Cell(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+
+		public void swap(int otherX, int otherY) {
+			T otherValue = get(otherX, otherY);
+			set(otherX, otherY, get(x, y));
+			set(x, y, otherValue);
 		}
 	}
 
@@ -112,12 +143,28 @@ public final class Matrix<T> {
 		return new Col(x);
 	}
 
+	public Cell cell(int x, int y) {
+		return new Cell(x, y);
+	}
+
 	public T get(int x, int y) {
 		return cells[x + y * width];
 	}
 
 	public void set(int x, int y, T value) {
 		cells[x + y * width] = value;
+	}
+
+	public Optional<Cell> findAny(T value) {
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				if (is(x, y, value)) {
+					return Optional.of(cell(x, y));
+				}
+			}
+		}
+
+		return Optional.empty();
 	}
 
 	public boolean is(int x, int y, T value) {

@@ -22,4 +22,9 @@ public record DoubleElement(ComponentId id, Double value) implements Element<Dou
 	public <T> Element<T> map(ElementMapper<T> mapper) throws ComponentException {
 		return mapper.map(this);
 	}
+
+	@Override
+	public DoubleElement rename(String newName) {
+		return new DoubleElement(id.rename(newName), value);
+	}
 }

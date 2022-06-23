@@ -15,6 +15,8 @@ public sealed interface Element<V> permits BooleanElement, DoubleElement, EmptyE
 
 	<T> Element<T> map(ElementMapper<T> mapper) throws ComponentException;
 
+	Element<V> rename(String newName);
+
 	default Optional<V> optional() {
 		return Optional.ofNullable(value());
 	}
