@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import jp.satomaru.util.ResourceAccessor;
+import jp.satomaru.util.ResourceAccessor.Key;
 import jp.satomaru.util.component.ComponentException.ErrorCode;
 import jp.satomaru.util.component.element.BooleanElement;
 import jp.satomaru.util.component.element.DoubleElement;
@@ -54,7 +56,14 @@ public final class Component<M> {
 		}
 	}
 
+	private static final ResourceAccessor MESSAGES = ResourceAccessor.of(Component.class.getPackage(), "messages");
+
 	private static final Pattern SPACE_PATTERN = Pattern.compile("\\s+");
+
+	public static String getMessage(ComponentId id, String subkey, String defaultMessage, Object... params) {
+		Key key = new Key(id.type(), id.name(), subkey, defaultMessage);
+		return MESSAGES.get(key, params);
+	}
 
 	private final Class<M> type;
 

@@ -1,10 +1,29 @@
 package jp.satomaru.util;
 
+import java.text.MessageFormat;
+import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.MissingResourceException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 public final class ResourceAccessor {
+
+	public record Key(Class<?> type, String name, String subkey, String defaultMessae) {
+
+		public String base() {
+			return Strings.join(type.getName(), "[", name, "]");
+		}
+
+		public String full() {
+			return Strings.join(type.getName(), "[", name, "].", subkey);
+		}
+
+		public String common() {
+			return Strings.join(type.getName(), ".", subkey);
+		}
+	}
 
 	private static final Pattern PACKAGE_DELIMITER = Pattern.compile("\\.");
 
@@ -44,7 +63,15 @@ public final class ResourceAccessor {
 		}
 	}
 
-	public String get(String key) {
-		return get(key, null);
+	public Optional<String> get(String key) {
+		return Optional.ofNullable(get(key, null));
+	}
+
+	public String get(Key key, Object... params) {
+		String caption = get(key.base()).orElse(key.name);
+		String message = get(key.full()).or(() -> get(key.common())).orElse(key.defaultMessae);
+		ArrayDeque<Object> deque = new ArrayDeque<>(Arrays.asList(params));
+		deque.addFirst(caption);
+		return MessageFormat.format(message, deque.toArray());
 	}
 }

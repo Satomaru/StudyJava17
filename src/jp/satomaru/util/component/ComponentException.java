@@ -1,9 +1,6 @@
 package jp.satomaru.util.component;
 
-import java.text.MessageFormat;
-
 import jp.satomaru.util.LocalizedException;
-import jp.satomaru.util.ResourceAccessor;
 
 public class ComponentException extends LocalizedException {
 
@@ -22,15 +19,12 @@ public class ComponentException extends LocalizedException {
 		ILLEGAL_VALUE("illegal {0}: {1}"),
 		FAILED("{0} failed: {1}");
 
-		private final String defaultMessage;
+		private final String message;
 
-		private ErrorCode(String defaultMessage) {
-			this.defaultMessage = defaultMessage;
+		private ErrorCode(String message) {
+			this.message = message;
 		}
 	}
-
-	private static final ResourceAccessor ACCESSOR = ResourceAccessor.of(
-		ComponentException.class.getPackage(), "messages");
 
 	private final ComponentId id;
 
@@ -66,27 +60,10 @@ public class ComponentException extends LocalizedException {
 
 	@Override
 	protected final String readLocalizedMessage() {
-		String caption = ACCESSOR.get(id.key());
-
-		if (caption == null) {
-			caption = id.name();
-		}
-
-		String subkey = getMessaggeSubkey();
-		String message = ACCESSOR.get(id.key(subkey));
-
-		if (message == null) {
-			message = ACCESSOR.get(id.keyWithoutName(subkey));
-		}
-
-		if (message == null) {
-			message = errorCode.defaultMessage;
-		}
-
-		return MessageFormat.format(message, caption, value);
+		return Component.getMessage(id, getSubkey(), errorCode.message, value);
 	}
 
-	protected String getMessaggeSubkey() {
+	protected String getSubkey() {
 		return errorCode.name();
 	}
 }

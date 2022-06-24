@@ -16,7 +16,7 @@ public class ComponentCustomException extends ComponentException {
 	}
 
 	@Override
-	protected String getMessaggeSubkey() {
+	protected String getSubkey() {
 		return customCode;
 	}
 }

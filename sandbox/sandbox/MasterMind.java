@@ -11,6 +11,7 @@ import jp.satomaru.util.Matrix;
 import jp.satomaru.util.Tester;
 import jp.satomaru.util.component.Component;
 import jp.satomaru.util.component.ComponentException;
+import jp.satomaru.util.component.ComponentId;
 import jp.satomaru.util.component.Dispatcher;
 import jp.satomaru.util.component.ElementSet;
 import jp.satomaru.util.component.element.mapper.ElementMapper;
@@ -18,13 +19,26 @@ import jp.satomaru.util.component.element.mapper.ElementMapper;
 /**
  * マスターマインド。
  *
- * ただいま作成中……。
+ * <p>
+ * 3x3マスの数値を当てるゲームです。マスの各行と各列には、ヒントとして H(it)とB(low)が表示されます。Hitは、正解の数を表します。
+ * Blowは、正解ではないけど同列または同行の違うマスであれば正解になる数を表します。
+ *
+ * <p>
+ * setコマンドを実行すると、指定したマスに、指定した値を設定します。 この時、指定した値が設定されていたマスには、
+ * 指定したマスに設定されていた値が設定されます。 つまり、「指定したマス」と「指定した値が設定されていたマス」の値が交換されます。
+ *
+ * <p>
+ * マスの値を設定した後、endコマンドでターンを終了します。 ここで正解が判定され、見事、全てのマスで正解した時はゲームクリアとなります。
  *
  * @author Satomaru
  */
 public final class MasterMind {
 
 	public static void main(String[] args) {
+		String prompt = Component.getMessage(ID, "PROMPT", "Command? (set x y value | end | quit)");
+		String succeeded = Component.getMessage(ID, "SUCCEEDED", "Congratulations!");
+		String failed = Component.getMessage(ID, "FAILED", "Game over.");
+
 		MasterMind me = new MasterMind();
 		me.initialize();
 
@@ -33,7 +47,7 @@ public final class MasterMind {
 
 			do {
 				me.show();
-				System.out.println("Command? (set x y value | end | quit)");
+				System.out.println(prompt);
 				ElementSet elements = COMPONENT.elements(scanner, "command", "arg1", "arg2", "arg3");
 
 				gameOver = DISPATCHER.run(me, elements)
@@ -45,15 +59,17 @@ public final class MasterMind {
 			} while (!gameOver);
 		}
 
+		me.show();
+
 		if (me.succeeded) {
-			System.out.println("Congratulations!");
+			System.out.println(succeeded);
 		} else {
-			System.out.println("Game over.");
+			System.out.println(failed);
 		}
 	}
 
 	private static final String BACKGROUND = """
-		Turn: *
+		Turn:***
 
 		   0  1  2
 		 +--+--+--+
@@ -63,11 +79,13 @@ public final class MasterMind {
 		 +--+--+--+
 		2|**|**|**|* *
 		 +--+--+--+
-		  ** ** **
-		  ** ** **
+		  ** ** ** H
+		  ** ** **   B
 		""";
 
 	private static final Component<MasterMind> COMPONENT = new Component<>(MasterMind.class);
+
+	private static final ComponentId ID = COMPONENT.id("main");
 
 	private static final Dispatcher<MasterMind, Boolean> DISPATCHER = COMPONENT
 		.dispatcher("set", MasterMind::set)
@@ -83,6 +101,7 @@ public final class MasterMind {
 	private final Integer[] vBlows = new Integer[3];
 	private final BlockFormatter formatter;
 	private final Integer[] turn = new Integer[1];
+	private final Boolean[] turnBegan = new Boolean[1];
 	private boolean succeeded;
 
 	public MasterMind() {
@@ -91,7 +110,8 @@ public final class MasterMind {
 		background.set(0, 0, BACKGROUND);
 
 		formatter = new BlockFormatter(background);
-		formatter.addLabel(6, 0, "%d", () -> turn[0]);
+		formatter.addLabel(5, 0, "%2d", () -> turn[0]);
+		formatter.addLabel(7, 0, "%s", () -> turnBegan[0] ? "*" : " ");
 
 		IntStream.range(0, 3).forEach(y -> {
 			IntStream.range(0, 3).forEach(x -> {
@@ -109,6 +129,7 @@ public final class MasterMind {
 
 	public void initialize() {
 		turn[0] = 1;
+		turnBegan[0] = true;
 		field.fill((x, y) -> 1 + x + y * 3);
 
 		do {
@@ -127,11 +148,13 @@ public final class MasterMind {
 		int y = parser.map("arg2", "y").validate(Tester.range(0, 2)).orElseThrow();
 		int value = parser.map("arg3", "value").validate(Tester.range(1, 9)).orElseThrow();
 		field.findAny(value).ifPresent(cell -> cell.swap(x, y));
+		turnBegan[0] = false;
 		return false;
 	}
 
 	public boolean end(ElementSet elements) throws ComponentException {
 		++turn[0];
+		turnBegan[0] = true;
 		succeeded = judge();
 		return succeeded;
 	}
