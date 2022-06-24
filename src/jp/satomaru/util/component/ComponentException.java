@@ -19,6 +19,7 @@ public class ComponentException extends LocalizedException {
 		PARSE_LOCALDATETIME_FAILURE("could not parse {0} as localDateTime: {1}"),
 		PARSE_LONG_FAILURE("could not parse {0} as long: {1}"),
 		PARSE_STRING_FAILURE("could not parse {0} as string: {1}"),
+		ILLEGAL_VALUE("illegal {0}: {1}"),
 		FAILED("{0} failed: {1}");
 
 		private final String defaultMessage;

@@ -8,6 +8,18 @@ import jp.satomaru.util.component.element.mapper.ElementMapper;
 
 public final class ElementSet {
 
+	@FunctionalInterface
+	public interface GetAndMap<V> {
+
+		Element<V> map(String name) throws ComponentException;
+	}
+
+	@FunctionalInterface
+	public interface RenameAndMap<V> {
+
+		Element<V> map(String name, String newName) throws ComponentException;
+	}
+
 	private final Class<?> type;
 
 	private final Map<String, Element<?>> elements;
@@ -25,19 +37,11 @@ public final class ElementSet {
 		return new EmptyElement<>(new ComponentId(type, name));
 	}
 
-	public <V> ElementParser<V> parseBy(ElementMapper<V> mapper) {
-		return name -> get(name).parse(mapper);
+	public <V> GetAndMap<V> getAndMapBy(ElementMapper<V> mapper) {
+		return name -> get(name).map(mapper);
 	}
 
-	public <V> ElementParser<V> parseOrThrowBy(ElementMapper<V> mapper) {
-		return name -> get(name).parseOrThrow(mapper);
-	}
-
-	public <V> ElementParserWithRename<V> parseAndRenameBy(ElementMapper<V> mapper) {
-		return (name, newName) -> get(name).rename(newName).parse(mapper);
-	}
-
-	public <V> ElementParserWithRename<V> parseAndRenameOrThrowBy(ElementMapper<V> mapper) {
-		return (name, newName) -> get(name).rename(newName).parseOrThrow(mapper);
+	public <V> RenameAndMap<V> renameAndMap(ElementMapper<V> mapper) {
+		return (name, newName) -> get(name).rename(newName).map(mapper);
 	}
 }

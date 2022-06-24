@@ -1,6 +1,7 @@
 package jp.satomaru.util.component.element;
 
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import jp.satomaru.util.component.ComponentException;
 import jp.satomaru.util.component.ComponentException.ErrorCode;
@@ -25,15 +26,17 @@ public sealed interface Element<V> permits BooleanElement, DoubleElement, EmptyE
 		return optional().isEmpty();
 	}
 
-	default <P> P parse(ElementMapper<P> mapper) throws ComponentException {
-		return map(mapper).value();
+	default V orElseThrow() throws ComponentException {
+		return optional().orElseThrow(() -> new ComponentException(id(), ErrorCode.EMPTY, value()));
 	}
 
-	default <P> P parseOrThrow(ElementMapper<P> mapper) throws ComponentException {
-		if (isEmpty()) {
-			throw new ComponentException(id(), ErrorCode.EMPTY, value());
+	default Element<V> validate(Predicate<V> predicate) throws ComponentException {
+		if (!isEmpty()) {
+			if (!predicate.test(value())) {
+				throw new ComponentException(id(), ErrorCode.ILLEGAL_VALUE, value());
+			}
 		}
 
-		return parse(mapper);
+		return this;
 	}
 }

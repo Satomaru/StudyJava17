@@ -8,6 +8,7 @@ import jp.satomaru.util.BlockFormatter;
 import jp.satomaru.util.CharBlockBuilder;
 import jp.satomaru.util.Lottery;
 import jp.satomaru.util.Matrix;
+import jp.satomaru.util.Tester;
 import jp.satomaru.util.component.Component;
 import jp.satomaru.util.component.ComponentException;
 import jp.satomaru.util.component.Dispatcher;
@@ -121,10 +122,10 @@ public final class MasterMind {
 	}
 
 	public boolean set(ElementSet elements) throws ComponentException {
-		var parser = elements.parseAndRenameOrThrowBy(ElementMapper.INTEGER);
-		int x = parser.parseAndRename("arg1", "x");
-		int y = parser.parseAndRename("arg2", "y");
-		int value = parser.parseAndRename("arg3", "value");
+		var parser = elements.renameAndMap(ElementMapper.INTEGER);
+		int x = parser.map("arg1", "x").validate(Tester.range(0, 2)).orElseThrow();
+		int y = parser.map("arg2", "y").validate(Tester.range(0, 2)).orElseThrow();
+		int value = parser.map("arg3", "value").validate(Tester.range(1, 9)).orElseThrow();
 		field.findAny(value).ifPresent(cell -> cell.swap(x, y));
 		return false;
 	}
