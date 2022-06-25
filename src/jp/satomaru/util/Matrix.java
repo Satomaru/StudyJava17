@@ -164,6 +164,24 @@ public final class Matrix<T> {
 		public boolean contains(T value) {
 			return cells().map(Cell::get).anyMatch(value::equals);
 		}
+
+		/**
+		 * 全てのセルの値を取得します。
+		 *
+		 * @param consumer 列番号、行番号、値を受け取る関数
+		 */
+		public void forEach(TwoDimConsumer<T> consumer) {
+			cells().forEach(cell -> cell.get(consumer));
+		}
+
+		/**
+		 * 全てのセルの値を設定します。
+		 *
+		 * @param supplier 列番号と行番号を受け取って値を作成する関数
+		 */
+		public void fill(TwoDimSupplier<T> supplier) {
+			cells().forEach(cell -> cell.set(supplier));
+		}
 	}
 
 	/** 行。 */
@@ -222,6 +240,24 @@ public final class Matrix<T> {
 		 */
 		public boolean contains(T value) {
 			return cells().map(Cell::get).anyMatch(value::equals);
+		}
+
+		/**
+		 * 全てのセルの値を取得します。
+		 *
+		 * @param consumer 列番号、行番号、値を受け取る関数
+		 */
+		public void forEach(TwoDimConsumer<T> consumer) {
+			cells().forEach(cell -> cell.get(consumer));
+		}
+
+		/**
+		 * 全てのセルの値を設定します。
+		 *
+		 * @param supplier 列番号と行番号を受け取って値を作成する関数
+		 */
+		public void fill(TwoDimSupplier<T> supplier) {
+			cells().forEach(cell -> cell.set(supplier));
 		}
 	}
 
@@ -341,5 +377,23 @@ public final class Matrix<T> {
 	 */
 	public boolean contains(T value) {
 		return Arrays.stream(values).anyMatch(value::equals);
+	}
+
+	/**
+	 * 全てのセルの値を取得します。
+	 *
+	 * @param consumer 列番号、行番号、値を受け取る関数
+	 */
+	public void forEach(TwoDimConsumer<T> consumer) {
+		cells().forEach(cell -> cell.get(consumer));
+	}
+
+	/**
+	 * 全てのセルの値を設定します。
+	 *
+	 * @param supplier 列番号と行番号を受け取って値を作成する関数
+	 */
+	public void fill(TwoDimSupplier<T> supplier) {
+		cells().forEach(cell -> cell.set(supplier));
 	}
 }

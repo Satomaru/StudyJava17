@@ -145,9 +145,9 @@ public final class MasterMind {
 
 	public boolean set(ElementSet elements) throws ComponentException {
 		var parser = elements.renameAndMap(ElementMapper.INTEGER);
-		int x = parser.map("arg1", "x").must(Tester.range(0, 3)).orElseThrow();
-		int y = parser.map("arg2", "y").must(Tester.range(0, 3)).orElseThrow();
-		int value = parser.map("arg3", "value").must(Tester.range(1, 10)).orElseThrow();
+		int x = parser.map("arg1", "x").must(Tester.range(0, 3)).get();
+		int y = parser.map("arg2", "y").must(Tester.range(0, 3)).get();
+		int value = parser.map("arg3", "value").must(Tester.range(1, 10)).get();
 
 		var target = field.cell(x, y);
 		field.find(value).findAny().ifPresent(cell -> cell.swap(target));
@@ -173,7 +173,7 @@ public final class MasterMind {
 		Arrays.fill(vHits, 0);
 		Arrays.fill(vBlows, 0);
 
-		field.cells().forEach(cell -> cell.get((x, y, value) -> {
+		field.forEach((x, y, value) -> {
 			if (answer.cell(x, y).is(value)) {
 				++hHits[y];
 				++vHits[x];
@@ -186,7 +186,7 @@ public final class MasterMind {
 					++vBlows[x];
 				}
 			}
-		}));
+		});
 
 		return Arrays.stream(hHits).allMatch(hit -> hit == 3);
 	}

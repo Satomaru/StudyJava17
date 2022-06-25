@@ -26,8 +26,12 @@ public sealed interface Element<V> permits BooleanElement, DoubleElement, EmptyE
 		return optional().isEmpty();
 	}
 
-	default V orElseThrow() throws ComponentException {
+	default V get() throws ComponentException {
 		return optional().orElseThrow(() -> new ComponentException(id(), ErrorCode.EMPTY, value()));
+	}
+
+	default V orElse(V whenNull) {
+		return optional().orElse(whenNull);
 	}
 
 	default Element<V> must(Predicate<V> predicate) throws ComponentException {
