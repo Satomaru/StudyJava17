@@ -35,7 +35,7 @@ import jp.satomaru.util.component.element.mapper.ElementMapper;
 public final class MasterMind {
 
 	public static void main(String[] args) {
-		String prompt = Component.getMessage(ID, "PROMPT", "Command? (set x y value | end | quit)");
+		String prompt = Component.getMessage(ID, "PROMPT", "Command? (set <x> <y> <value> | end | quit)");
 		String succeeded = Component.getMessage(ID, "SUCCEEDED", "Congratulations!");
 		String failed = Component.getMessage(ID, "FAILED", "Game over.");
 
@@ -115,7 +115,7 @@ public final class MasterMind {
 
 		IntStream.range(0, 3).forEach(y -> {
 			IntStream.range(0, 3).forEach(x -> {
-				formatter.addLabel(x * 3 + 2, y * 2 + 4, "%2d", () -> field.get(x, y));
+				formatter.addLabel(x * 3 + 2, y * 2 + 4, "%2d", () -> field.cell(x, y).get());
 			});
 		});
 
@@ -128,13 +128,14 @@ public final class MasterMind {
 	}
 
 	public void initialize() {
+		field.cells().forEach(cell -> cell.set((x, y) -> 1 + x + y * 3));
 		turn[0] = 1;
 		turnBegan[0] = true;
-		field.fill((x, y) -> 1 + x + y * 3);
+		succeeded = false;
 
 		do {
 			Lottery<Integer> values = Lottery.generate(9, 1, previous -> previous + 1);
-			answer.fill((x, y) -> values.next());
+			answer.cells().forEach(cell -> cell.set(values.next()));
 		} while (judge());
 	}
 
@@ -144,10 +145,12 @@ public final class MasterMind {
 
 	public boolean set(ElementSet elements) throws ComponentException {
 		var parser = elements.renameAndMap(ElementMapper.INTEGER);
-		int x = parser.map("arg1", "x").validate(Tester.range(0, 2)).orElseThrow();
-		int y = parser.map("arg2", "y").validate(Tester.range(0, 2)).orElseThrow();
-		int value = parser.map("arg3", "value").validate(Tester.range(1, 9)).orElseThrow();
-		field.findAny(value).ifPresent(cell -> cell.swap(x, y));
+		int x = parser.map("arg1", "x").must(Tester.range(0, 3)).orElseThrow();
+		int y = parser.map("arg2", "y").must(Tester.range(0, 3)).orElseThrow();
+		int value = parser.map("arg3", "value").must(Tester.range(1, 10)).orElseThrow();
+
+		var target = field.cell(x, y);
+		field.find(value).findAny().ifPresent(cell -> cell.swap(target));
 		turnBegan[0] = false;
 		return false;
 	}
@@ -170,20 +173,20 @@ public final class MasterMind {
 		Arrays.fill(vHits, 0);
 		Arrays.fill(vBlows, 0);
 
-		field.forEach((x, y, value) -> {
-			if (answer.is(x, y, value)) {
+		field.cells().forEach(cell -> cell.get((x, y, value) -> {
+			if (answer.cell(x, y).is(value)) {
 				++hHits[y];
 				++vHits[x];
 			} else {
-				if (answer.row(y).stream().anyMatch(value::equals)) {
+				if (answer.row(y).contains(value)) {
 					++hBlows[y];
 				}
 
-				if (answer.col(x).stream().anyMatch(value::equals)) {
+				if (answer.col(x).contains(value)) {
 					++vBlows[x];
 				}
 			}
-		});
+		}));
 
 		return Arrays.stream(hHits).allMatch(hit -> hit == 3);
 	}

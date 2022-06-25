@@ -30,7 +30,7 @@ public sealed interface Element<V> permits BooleanElement, DoubleElement, EmptyE
 		return optional().orElseThrow(() -> new ComponentException(id(), ErrorCode.EMPTY, value()));
 	}
 
-	default Element<V> validate(Predicate<V> predicate) throws ComponentException {
+	default Element<V> must(Predicate<V> predicate) throws ComponentException {
 		if (!isEmpty()) {
 			if (!predicate.test(value())) {
 				throw new ComponentException(id(), ErrorCode.ILLEGAL_VALUE, value());

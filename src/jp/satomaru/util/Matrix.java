@@ -1,205 +1,345 @@
 package jp.satomaru.util;
 
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import jp.satomaru.util.function.IndexedConsumer;
 import jp.satomaru.util.function.TwoDimConsumer;
 import jp.satomaru.util.function.TwoDimSupplier;
 
+/**
+ * 二次元配列。
+ *
+ * @author Satomaru
+ *
+ * @param <T> 格納されている値
+ */
 public final class Matrix<T> {
 
-	public abstract sealed class Line permits Row, Col {
-
-		private final int count;
-
-		private Line(int count) {
-			this.count = count;
-		}
-
-		public abstract T get(int index);
-
-		public abstract void set(int index, T value);
-
-		public abstract Cell cell(int index);
-
-		public final boolean is(int index, T value) {
-			return get(index).equals(value);
-		}
-
-		public final void fill(IntFunction<T> generator) {
-			for (int index = 0; index < count; index++) {
-				set(index, generator.apply(index));
-			}
-		}
-
-		public final void forEach(IndexedConsumer<T> acceptor) {
-			for (int index = 0; index < count; index++) {
-				acceptor.accept(index, get(index));
-			}
-		}
-
-		public final Stream<T> stream() {
-			return IntStream.range(0, count).mapToObj(this::get);
-		}
-	}
-
-	public final class Row extends Line {
-
-		private final int y;
-
-		private Row(int y) {
-			super(width);
-			this.y = y;
-		}
-
-		@Override
-		public T get(int index) {
-			return Matrix.this.get(index, y);
-		}
-
-		@Override
-		public void set(int index, T value) {
-			Matrix.this.set(index, y, value);
-		}
-
-		@Override
-		public Cell cell(int index) {
-			return new Cell(index, y);
-		}
-	}
-
-	public final class Col extends Line {
-
-		private final int x;
-
-		private Col(int x) {
-			super(height);
-			this.x = x;
-		}
-
-		@Override
-		public T get(int index) {
-			return Matrix.this.get(x, index);
-		}
-
-		@Override
-		public void set(int index, T value) {
-			Matrix.this.set(x, index, value);
-		}
-
-		@Override
-		public Cell cell(int index) {
-			return new Cell(x, index);
-		}
-	}
-
+	/** セル。 */
 	public final class Cell {
 
+		/** 列番号。 */
 		private final int x;
 
+		/** 行番号。 */
 		private final int y;
 
 		private Cell(int x, int y) {
-			this.x = x;
-			this.y = y;
+			this.x = Tester.must("x", x, Tester.range(0, width));
+			this.y = Tester.must("y", y, Tester.range(0, height));
 		}
 
-		public void swap(int otherX, int otherY) {
-			T otherValue = get(otherX, otherY);
-			set(otherX, otherY, get(x, y));
-			set(x, y, otherValue);
+		/**
+		 * 列番号を取得します。
+		 *
+		 * @return 列番号
+		 */
+		public int x() {
+			return x;
+		}
+
+		/**
+		 * 行番号を取得します。
+		 *
+		 * @return 行番号
+		 */
+		public int y() {
+			return y;
+		}
+
+		/**
+		 * 値を取得します。
+		 *
+		 * @return 値
+		 */
+		public T get() {
+			return values[x + y * width];
+		}
+
+		/**
+		 * 値を取得します。
+		 *
+		 * @param consumer 列番号、行番号、値を受け取る関数
+		 */
+		public void get(TwoDimConsumer<T> consumer) {
+			consumer.accept(x, y, get());
+		}
+
+		/**
+		 * 値を設定します。
+		 *
+		 * @param value 値
+		 */
+		public void set(T value) {
+			values[x + y * width] = value;
+		}
+
+		/**
+		 * 値を設定します。
+		 *
+		 * @param supplier 列番号と行番号から値を作成する関数
+		 */
+		public void set(TwoDimSupplier<T> supplier) {
+			set(supplier.get(x, y));
+		}
+
+		/**
+		 * 値を判定します。
+		 *
+		 * @param value 期待する値
+		 * @return 期待する値である場合はtrue
+		 */
+		public boolean is(T value) {
+			return Tester.sameOrEquals(value).test(get());
+		}
+
+		/**
+		 * 値を交換します。
+		 *
+		 * @param other 交換先のセル
+		 */
+		public void swap(Cell other) {
+			T otherValue = other.get();
+			other.set(get());
+			set(otherValue);
 		}
 	}
 
+	/** 列。 */
+	public final class Col {
+
+		/** 列番号。 */
+		private final int x;
+
+		private Col(int x) {
+			this.x = Tester.must("x", x, Tester.range(0, width));
+		}
+
+		/**
+		 * 列番号を取得します。
+		 *
+		 * @return 列番号
+		 */
+		public int x() {
+			return x;
+		}
+
+		/**
+		 * セルを取得します。
+		 *
+		 * @return セル
+		 */
+		public Stream<Cell> cells() {
+			return IntStream.range(0, height).mapToObj(y -> new Cell(x, y));
+		}
+
+		/**
+		 * セルを取得します。
+		 *
+		 * @param y 行番号
+		 * @return セル
+		 */
+		public Cell cell(int y) {
+			return new Cell(x, y);
+		}
+
+		/**
+		 * 指定された値を持つセルを検索します。
+		 *
+		 * @param value 検索する値
+		 * @return セル
+		 */
+		public Stream<Cell> find(T value) {
+			return cells().filter(cell -> cell.is(value));
+		}
+
+		/**
+		 * 指定された値を含むことを判定します。
+		 *
+		 * @param value 値
+		 * @return 指定された値を含む場合はtrue
+		 */
+		public boolean contains(T value) {
+			return cells().map(Cell::get).anyMatch(value::equals);
+		}
+	}
+
+	/** 行。 */
+	public final class Row {
+
+		/** 行番号。 */
+		private final int y;
+
+		private Row(int y) {
+			this.y = Tester.must("y", y, Tester.range(0, height));
+		}
+
+		/**
+		 * 行番号を取得します。
+		 *
+		 * @return 行番号
+		 */
+		public int y() {
+			return y;
+		}
+
+		/**
+		 * セルを取得します。
+		 *
+		 * @return セル
+		 */
+		public Stream<Cell> cells() {
+			return IntStream.range(0, width).mapToObj(x -> new Cell(x, y));
+		}
+
+		/**
+		 * セルを取得します。
+		 *
+		 * @param x 列番号
+		 * @return セル
+		 */
+		public Cell cell(int x) {
+			return new Cell(x, y);
+		}
+
+		/**
+		 * 指定された値を持つセルを検索します。
+		 *
+		 * @param value 検索する値
+		 * @return セル
+		 */
+		public Stream<Cell> find(T value) {
+			return cells().filter(cell -> cell.is(value));
+		}
+
+		/**
+		 * 指定された値を含むことを判定します。
+		 *
+		 * @param value 値
+		 * @return 指定された値を含む場合はtrue
+		 */
+		public boolean contains(T value) {
+			return cells().map(Cell::get).anyMatch(value::equals);
+		}
+	}
+
+	/** 列数。 */
 	private final int width;
 
+	/** 行数。 */
 	private final int height;
 
-	private final T[] cells;
+	/** 値。 */
+	private final T[] values;
 
+	/**
+	 * 二次元配列を作成します。
+	 *
+	 * @param width       列数
+	 * @param height      行数
+	 * @param constructor 一次元配列のコンストラクタ
+	 */
 	public Matrix(int width, int height, IntFunction<T[]> constructor) {
-		this.width = width;
-		this.height = height;
-		this.cells = constructor.apply(width * height);
+		this.width = Tester.must("width", width, Tester.gt(0));
+		this.height = Tester.must("height", height, Tester.gt(0));
+		this.values = constructor.apply(width * height);
 	}
 
+	/**
+	 * 列数を取得します。
+	 *
+	 * @return 列数
+	 */
 	public int width() {
 		return width;
 	}
 
+	/**
+	 * 行数を取得します。
+	 *
+	 * @return 行数
+	 */
 	public int height() {
 		return height;
 	}
 
+	/**
+	 * 行を取得します。
+	 *
+	 * @return 行
+	 */
+	public Stream<Row> rows() {
+		return IntStream.range(0, height).mapToObj(y -> new Row(y));
+	}
+
+	/**
+	 * 行を取得します。
+	 *
+	 * @param y 行番号
+	 * @return 行
+	 */
 	public Row row(int y) {
 		return new Row(y);
 	}
 
+	/**
+	 * 列を取得します。
+	 *
+	 * @return 列
+	 */
+	public Stream<Col> cols() {
+		return IntStream.range(0, width).mapToObj(x -> new Col(x));
+	}
+
+	/**
+	 * 列を取得します。
+	 *
+	 * @param x 列番号
+	 * @return 列
+	 */
 	public Col col(int x) {
 		return new Col(x);
 	}
 
+	/**
+	 * セルを取得します。
+	 *
+	 * @return セル
+	 */
+	public Stream<Cell> cells() {
+		return rows().flatMap(Row::cells);
+	}
+
+	/**
+	 * セルを取得します。
+	 *
+	 * @param x 列番号
+	 * @param y 行番号
+	 * @return セル
+	 */
 	public Cell cell(int x, int y) {
 		return new Cell(x, y);
 	}
 
-	public T get(int x, int y) {
-		return cells[x + y * width];
+	/**
+	 * 指定された値を持つセルを検索します。
+	 *
+	 * @param value 検索する値
+	 * @return セル
+	 */
+	public Stream<Cell> find(T value) {
+		return cells().filter(cell -> cell.is(value));
 	}
 
-	public void set(int x, int y, T value) {
-		cells[x + y * width] = value;
-	}
-
-	public Optional<Cell> findAny(T value) {
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				if (is(x, y, value)) {
-					return Optional.of(cell(x, y));
-				}
-			}
-		}
-
-		return Optional.empty();
-	}
-
-	public boolean is(int x, int y, T value) {
-		return get(x, y).equals(value);
-	}
-
-	public void fill(TwoDimSupplier<T> generator) {
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				set(x, y, generator.get(x, y));
-			}
-		}
-	}
-
-	public void forEach(TwoDimConsumer<T> acceptor) {
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				acceptor.accept(x, y, get(x, y));
-			}
-		}
-	}
-
-	public void forEachRow(IndexedConsumer<Row> acceptor) {
-		for (int y = 0; y < height; y++) {
-			acceptor.accept(y, row(y));
-		}
-	}
-
-	public void forEachCol(IndexedConsumer<Col> acceptor) {
-		for (int x = 0; x < width; x++) {
-			acceptor.accept(x, col(x));
-		}
-	}
-
-	public Stream<T> stream() {
-		return Arrays.stream(cells);
+	/**
+	 * 指定された値を含むことを判定します。
+	 *
+	 * @param value 値
+	 * @return 指定された値を含む場合はtrue
+	 */
+	public boolean contains(T value) {
+		return Arrays.stream(values).anyMatch(value::equals);
 	}
 }
