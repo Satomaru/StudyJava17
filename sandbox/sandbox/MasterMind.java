@@ -128,14 +128,14 @@ public final class MasterMind {
 	}
 
 	public void initialize() {
-		field.cells().forEach(cell -> cell.set((x, y) -> 1 + x + y * 3));
+		field.fill((x, y) -> 1 + x + y * 3);
 		turn[0] = 1;
 		turnBegan[0] = true;
 		succeeded = false;
 
 		do {
 			Lottery<Integer> values = Lottery.generate(9, 1, previous -> previous + 1);
-			answer.cells().forEach(cell -> cell.set(values.next()));
+			answer.fill((x, y) -> values.next());
 		} while (judge());
 	}
 
@@ -174,7 +174,7 @@ public final class MasterMind {
 		Arrays.fill(vBlows, 0);
 
 		field.forEach((x, y, value) -> {
-			if (answer.cell(x, y).is(value)) {
+			if (answer.cell(x, y).eq(value)) {
 				++hHits[y];
 				++vHits[x];
 			} else {

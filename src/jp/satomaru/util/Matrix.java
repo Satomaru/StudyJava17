@@ -2,6 +2,7 @@ package jp.satomaru.util;
 
 import java.util.Arrays;
 import java.util.function.IntFunction;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -86,13 +87,33 @@ public final class Matrix<T> {
 		}
 
 		/**
-		 * 値を判定します。
+		 * 値が期待する値であるを判定します。
 		 *
 		 * @param value 期待する値
-		 * @return 期待する値である場合はtrue
+		 * @return 値が期待する値である場合はtrue
 		 */
-		public boolean is(T value) {
-			return Tester.sameOrEquals(value).test(get());
+		public boolean eq(T value) {
+			return is(Tester.eq(value));
+		}
+
+		/**
+		 * 値が期待しない値ではないことを判定します。
+		 *
+		 * @param value 期待しない値
+		 * @return 値が期待しない値ではない場合はtrue
+		 */
+		public boolean not(T value) {
+			return is(Tester.not(value));
+		}
+
+		/**
+		 * 値を判定します。
+		 *
+		 * @param predicate 判定する関数
+		 * @return 判定結果
+		 */
+		public boolean is(Predicate<T> predicate) {
+			return predicate.test(get());
 		}
 
 		/**
@@ -152,7 +173,7 @@ public final class Matrix<T> {
 		 * @return セル
 		 */
 		public Stream<Cell> find(T value) {
-			return cells().filter(cell -> cell.is(value));
+			return cells().filter(cell -> cell.eq(value));
 		}
 
 		/**
@@ -229,7 +250,7 @@ public final class Matrix<T> {
 		 * @return セル
 		 */
 		public Stream<Cell> find(T value) {
-			return cells().filter(cell -> cell.is(value));
+			return cells().filter(cell -> cell.eq(value));
 		}
 
 		/**
@@ -366,7 +387,7 @@ public final class Matrix<T> {
 	 * @return セル
 	 */
 	public Stream<Cell> find(T value) {
-		return cells().filter(cell -> cell.is(value));
+		return cells().filter(cell -> cell.eq(value));
 	}
 
 	/**
