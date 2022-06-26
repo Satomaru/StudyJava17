@@ -7,7 +7,6 @@ import java.util.stream.IntStream;
 import jp.satomaru.util.BlockFormatter;
 import jp.satomaru.util.CharBlockBuilder;
 import jp.satomaru.util.Lottery;
-import jp.satomaru.util.Matrix;
 import jp.satomaru.util.Tester;
 import jp.satomaru.util.component.Component;
 import jp.satomaru.util.component.ComponentException;
@@ -15,6 +14,7 @@ import jp.satomaru.util.component.ComponentId;
 import jp.satomaru.util.component.Dispatcher;
 import jp.satomaru.util.component.ElementSet;
 import jp.satomaru.util.component.element.mapper.ElementMapper;
+import jp.satomaru.util.container.Matrix;
 
 /**
  * マスターマインド。
@@ -93,8 +93,8 @@ public final class MasterMind {
 		.append("quit", MasterMind::quit)
 		.end("command");
 
-	private final Matrix<Integer> answer = new Matrix<>(3, 3, Integer[]::new);
-	private final Matrix<Integer> field = new Matrix<>(3, 3, Integer[]::new);
+	private final Matrix<Integer> answer = Matrix.ofInteger(3, 3);
+	private final Matrix<Integer> field = Matrix.ofInteger(3, 3);
 	private final Integer[] hHits = new Integer[3];
 	private final Integer[] hBlows = new Integer[3];
 	private final Integer[] vHits = new Integer[3];

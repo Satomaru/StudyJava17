@@ -43,7 +43,7 @@ public final class Tester<T> {
 	}
 
 	/**
-	 * 比較可能な値において、未満 (less-than) であることを検査します。
+	 * 比較可能な値において、比較対象未満であることを検査します。
 	 *
 	 * @param <T>   検査する値
 	 * @param other 比較対象（null不可）
@@ -54,7 +54,7 @@ public final class Tester<T> {
 	}
 
 	/**
-	 * 比較可能な値において、以下 (less-equal) であることを検査します。
+	 * 比較可能な値において、比較対象以下であることを検査します。
 	 *
 	 * @param <T>   検査する値
 	 * @param other 比較対象（null不可）
@@ -65,7 +65,7 @@ public final class Tester<T> {
 	}
 
 	/**
-	 * 比較可能な値において、超過 (greater-than) であることを検査します。
+	 * 比較可能な値において、比較対象超過であることを検査します。
 	 *
 	 * @param <T>   検査する値
 	 * @param other 比較対象（null不可）
@@ -76,7 +76,7 @@ public final class Tester<T> {
 	}
 
 	/**
-	 * 比較可能な値において、以上 (greater-equal) であることを検査します。
+	 * 比較可能な値において、比較対象以上であることを検査します。
 	 *
 	 * @param <T>   検査する値
 	 * @param other 比較対象（null不可）
@@ -87,7 +87,7 @@ public final class Tester<T> {
 	}
 
 	/**
-	 * 比較可能な値において、範囲内であることを検査します。
+	 * 比較可能な値において、範囲内（最小値以上、かつ最大値未満）であることを検査します。
 	 *
 	 * @param <T>          検査する値
 	 * @param min          範囲最小値
@@ -99,7 +99,7 @@ public final class Tester<T> {
 	}
 
 	/**
-	 * 比較可能な値において、範囲外であることを検査します。
+	 * 比較可能な値において、範囲外（最小値未満、または最大値以上）であることを検査します。
 	 *
 	 * @param <T>          検査する値
 	 * @param min          範囲最小値
@@ -111,7 +111,7 @@ public final class Tester<T> {
 	}
 
 	/**
-	 * 値が列挙された値の中のひとつであることを検査します。
+	 * 値が、期待する値の中のひとつであることを検査します。
 	 *
 	 * @param <T>    検査する値
 	 * @param others 期待する値
@@ -126,7 +126,7 @@ public final class Tester<T> {
 	}
 
 	/**
-	 * 値が列挙された値の中のひとつではないことを検査します。
+	 * 値が、期待しない値の中のひとつではないことを検査します。
 	 *
 	 * @param <T>    検査する値
 	 * @param others 期待しない値
@@ -152,6 +152,7 @@ public final class Tester<T> {
 	/**
 	 * 値をひとつの検査関数で検査します。
 	 *
+	 * <p>
 	 * 値が null の場合は {@link NullPointerException} が、値が検査関数で false の場合は
 	 * {@link IllegalArgumentException} がスローされます。
 	 *
@@ -179,6 +180,7 @@ public final class Tester<T> {
 	/**
 	 * 値を検査関数で検査します。
 	 *
+	 * <p>
 	 * 値が検査関数で false の場合は {@link IllegalArgumentException} がスローされます。なお、値が null
 	 * の場合は検査されません。
 	 *
@@ -196,6 +198,7 @@ public final class Tester<T> {
 	/**
 	 * 検査した値を取得します。
 	 *
+	 * <p>
 	 * ただし、値が null の場合は {@link NullPointerException} をスローします。
 	 *
 	 * @return 検査した値
@@ -211,6 +214,7 @@ public final class Tester<T> {
 	/**
 	 * 検査した値を取得します。
 	 *
+	 * <p>
 	 * ただし、値が null の場合は代替値を返却します。
 	 *
 	 * @param whenNull 値が null の場合に返却する代替値
