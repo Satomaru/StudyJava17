@@ -71,7 +71,7 @@ public final class MasterMind {
 		me.show(output);
 		output.newLine();
 
-		if (me.succeeded) {
+		if (me.isSucceeded()) {
 			output.writeLine(succeeded);
 		} else {
 			output.writeLine(failed);
@@ -168,12 +168,16 @@ public final class MasterMind {
 		++turn[0];
 		turnBegan[0] = true;
 		succeeded = judge();
-		return succeeded;
+		return succeeded || turn[0] > 10;
 	}
 
 	public boolean quit(ElementSet elements) throws ComponentException {
 		succeeded = false;
 		return true;
+	}
+
+	public boolean isSucceeded() {
+		return succeeded;
 	}
 
 	private boolean judge() {
