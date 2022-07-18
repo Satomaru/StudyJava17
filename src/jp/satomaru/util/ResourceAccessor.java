@@ -1,8 +1,8 @@
 package jp.satomaru.util;
 
 import java.text.MessageFormat;
-import java.util.ArrayDeque;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.MissingResourceException;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -70,8 +70,9 @@ public final class ResourceAccessor {
 	public String get(Key key, Object... params) {
 		String caption = get(key.base()).orElse(key.name);
 		String message = get(key.full()).or(() -> get(key.common())).orElse(key.defaultMessae);
-		ArrayDeque<Object> deque = new ArrayDeque<>(Arrays.asList(params));
-		deque.addFirst(caption);
-		return MessageFormat.format(message, deque.toArray());
+		ArrayList<Object> args = new ArrayList<>(params.length + 1);
+		args.add(caption);
+		Collections.addAll(args, params);
+		return MessageFormat.format(message, args.toArray());
 	}
 }

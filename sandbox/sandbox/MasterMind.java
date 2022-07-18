@@ -60,7 +60,7 @@ public final class MasterMind {
 				var elements = COMPONENT.elements(scanner, "command", "arg1", "arg2", "arg3");
 
 				gameOver = DISPATCHER.run(me, elements)
-					.ifPresentLeft(output::localizedMessage)
+					.ifPresentLeft(exception -> output.localizedMessage(exception).newLine())
 					.optionalRight()
 					.orElse(false);
 

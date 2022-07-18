@@ -91,6 +91,6 @@ public class LineAppender<A extends Appendable> {
 	}
 
 	public LineAppender<A> localizedMessage(Throwable throwable) {
-		return write(throwable.getLocalizedMessage()).newLine();
+		return write(throwable.getLocalizedMessage());
 	}
 }
