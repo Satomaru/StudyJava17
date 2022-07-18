@@ -19,7 +19,7 @@ public final class Tester<T> {
 	 * @param other 期待する値（null可）
 	 * @return 検査関数
 	 */
-	public static <T> Predicate<T> eq(T other) {
+	public static <T> Predicate<? super T> eq(T other) {
 		return value -> {
 			if (value == other) {
 				return true;
@@ -38,7 +38,7 @@ public final class Tester<T> {
 	 * @param other 期待しない値（null可）
 	 * @return 検査関数
 	 */
-	public static <T> Predicate<T> not(T other) {
+	public static <T> Predicate<? super T> ne(T other) {
 		return eq(other).negate();
 	}
 
@@ -106,8 +106,19 @@ public final class Tester<T> {
 	 * @param maxExclusive 範囲最大値（ただしこの値を含まない）
 	 * @return 検査関数
 	 */
-	public static <T extends Comparable<T>> Predicate<T> notRange(T min, T maxExclusive) {
+	public static <T extends Comparable<T>> Predicate<T> outOfRange(T min, T maxExclusive) {
 		return range(min, maxExclusive).negate();
+	}
+
+	/**
+	 * 配列の長さが範囲内（最小数以上、最大数以下）であることを検査します。
+	 *
+	 * @param min 最小数
+	 * @param max 最大数
+	 * @return 検査関数
+	 */
+	public static Predicate<Object[]> length(int min, int max) {
+		return array -> array.length >= min && array.length <= max;
 	}
 
 	/**
@@ -118,7 +129,7 @@ public final class Tester<T> {
 	 * @return 検査関数
 	 */
 	@SafeVarargs
-	public static <T> Predicate<T> oneOf(T... others) {
+	public static <T> Predicate<? super T> oneOf(T... others) {
 		return value -> {
 			var eq = eq(value);
 			return Stream.of(others).anyMatch(eq);
@@ -133,7 +144,7 @@ public final class Tester<T> {
 	 * @return 検査関数
 	 */
 	@SafeVarargs
-	public static <T extends Comparable<T>> Predicate<T> notOneOf(T... others) {
+	public static <T> Predicate<? super T> notOneOf(T... others) {
 		return oneOf(others).negate();
 	}
 
@@ -162,7 +173,7 @@ public final class Tester<T> {
 	 * @param predicate 検査関数
 	 * @return 検査した値
 	 */
-	public static <T> T must(String name, T target, Predicate<T> predicate) {
+	public static <T> T must(String name, T target, Predicate<? super T> predicate) {
 		return new Tester<>(name, target).must(predicate).get();
 	}
 
@@ -187,7 +198,7 @@ public final class Tester<T> {
 	 * @param predicate 検査関数
 	 * @return 検索オブジェクト
 	 */
-	public Tester<T> must(Predicate<T> predicate) {
+	public Tester<T> must(Predicate<? super T> predicate) {
 		if (target != null && !predicate.test(target)) {
 			throw new IllegalArgumentException(name);
 		}

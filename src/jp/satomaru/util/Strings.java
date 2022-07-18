@@ -1,6 +1,10 @@
 package jp.satomaru.util;
 
+import java.util.regex.Pattern;
+
 public final class Strings {
+
+	public static final Pattern LINE_DLIMITER_PATTERN = Pattern.compile("(\\r\\n|\\r|\\n)");
 
 	public static String join(Object... objects) {
 		return switch (objects.length) {
@@ -37,6 +41,18 @@ public final class Strings {
 		}
 
 		return new String(buffer);
+	}
+
+	public static Character[] charArray(String string) {
+		return string.chars()
+			.mapToObj(e -> (char) e)
+			.toArray(Character[]::new);
+	}
+
+	public static Character[][] charBlock(String string) {
+		return LINE_DLIMITER_PATTERN.splitAsStream(string)
+			.map(Strings::charArray)
+			.toArray(Character[][]::new);
 	}
 
 	private Strings() {
